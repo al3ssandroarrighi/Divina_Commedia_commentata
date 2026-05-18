@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La Divina Commedia Commentata - Edizione Interattiva</title>
+    
+    <!-- Tailwind CSS per uno stile moderno e reattivo -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Alpine.js per la gestione dinamica degli stati -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    
+    <!-- Google Fonts: Cinzel (titoli danteschi), Lora (testo della Commedia), Plus Jakarta Sans (interfaccia) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome per le icone -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #0d0203; /* Nero tendente al rosso dantesco profondo */
+            color: #f5ebeb;
+        }
+        .font-dante-title {
+            font-family: 'Cinzel', serif;
+        }
+        .font-dante-verse {
+            font-family: 'Lora', serif;
+        }
+        /* Scrollbar a tema rosso cupo */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(13, 2, 3, 0.5);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(182, 28, 41, 0.3);
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(182, 28, 41, 0.6);
+        }
+        .transition-all-300 {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        /* Effetto bagliore per elementi attivi */
+        .glow-red {
+            box-shadow: 0 0 15px rgba(182, 28, 41, 0.2);
+        }
+    </style>
+</head>
+<body x-data="commediaApp()" x-init="initApp()" class="min-h-screen flex flex-col justify-between overflow-x-hidden selection:bg-red-900 selection:text-white">
+
+    <!-- HEADER -->
+    <header class="border-b border-red-950/40 bg-[#160406]/80 backdrop-blur-md sticky top-0 z-50 transition-all-300">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div class="flex items-center space-x-3 cursor-pointer" @click="goHome()">
+                <span class="text-2xl text-[#b61c29] font-dante-title font-bold tracking-widest hover:text-red-400 transition-colors">DANTE</span>
+                <span class="text-xs uppercase tracking-widest text-red-300/40 border-l border-red-950/60 pl-3 hidden sm:inline">Divina Commedia Commentata</span>
+            </div>
+            
+            <!-- Controlli e Breadcrumbs -->
+            <div class="flex items-center space-x-4">
+                <nav class="flex items-center space-x-2 text-sm text-red-200/60">
+                    <button @click="goHome()" class="hover:text-red-400 transition-colors">Home</button>
+                    <template x-if="screen === 'cantica'">
+                        <div class="flex items-center space-x-2">
+                            <i class="fa-solid fa-chevron-right text-[10px] text-red-500/40"></i>
+                            <span class="capitalize text-red-400 font-semibold" x-text="activeCantica"></span>
+                        </div>
+                    </template>
+                </nav>
+
+                <!-- Toggle Modalità Autore / Lettore -->
+                <button @click="toggleAuthorMode()" 
+                        class="px-3 py-1.5 rounded-lg text-xs font-semibold tracking-wider uppercase border transition-all-300 flex items-center space-x-1"
+                        :class="authorMode ? 'bg-red-700/20 border-red-500 text-red-300 glow-red' : 'bg-transparent border-red-950/80 text-red-200/50 hover:text-red-300 hover:border-red-900'">
+                    <i class="fa-solid" :class="authorMode ? 'fa-pen-fancy' : 'fa-book-open'"></i>
+                    <span x-text="authorMode ? 'Modalità Autore' : 'Modalità Lettura'"></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT AREA -->
+    <main class="flex-grow">
+        
+        <!-- CARICAMENTO DEL DATABASE -->
+        <div x-show="loading" class="fixed inset-0 bg-[#0d0203] z-50 flex flex-col items-center justify-center space-y-4">
+            <div class="w-12 h-12 rounded-full border-2 border-red-900 border-t-red-500 animate-spin"></div>
+            <p class="font-dante-title text-sm tracking-widest text-red-300 animate-pulse">Caricamento dei Canti di Dante...</p>
+        </div>
+        
+        <!-- SCHERMATA 1: HOME PAGE -->
+        <section x-show="screen === 'home'" 
+                 x-transition:enter="transition ease-out duration-500"
+                 x-transition:enter-start="opacity-0 transform translate-y-4"
+                 x-transition:enter-end="opacity-100 transform translate-y-0"
+                 class="max-w-7xl mx-auto px-6 py-12 flex flex-col items-center justify-center min-h-[80vh]">
+            
+            <div class="text-center mb-16 max-w-2xl">
+                <h1 class="text-5xl md:text-7xl font-dante-title font-black tracking-wider text-white mb-4 bg-clip-text text-transparent bg-gradient-to-r from-red-100 via-red-500 to-amber-200">
+                    LA DIVINA COMMEDIA
+                </h1>
+                <p class="text-lg font-light text-red-200/60 italic font-dante-verse">
+                    "Per correr miglior acque alza le vele omai la navicella del mio ingegno"
+                </p>
+                <div class="w-24 h-[1px] bg-red-900/50 mx-auto mt-6"></div>
+            </div>
+
+            <!-- Griglia delle tre Cantiche (Rettangoli Smussati Verticali) -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 w-full max-w-5xl">
+                
+                <!-- CARD INFERNO -->
+                <div @click="selectCantica('inferno')" 
+                     class="group relative overflow-hidden rounded-2xl border border-red-950 bg-[#1a0406]/40 cursor-pointer transition-all duration-500 hover:shadow-2xl hover:shadow-red-950/60 hover:-translate-y-2 flex flex-col justify-end p-8 h-[400px] md:h-[480px]">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent z-10"></div>
+                    <img src="https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&q=80&w=600" 
+                         alt="Inferno" 
+                         class="absolute inset-0 w-full h-full object-cover opacity-20 group-hover:opacity-40 group-hover:scale-105 transition-all duration-700 ease-out z-0">
+                    <div class="relative z-20">
+                        <span class="text-xs uppercase tracking-[0.25em] text-red-500 font-bold mb-2 block">Cantica I</span>
+                        <h2 class="text-4xl font-dante-title font-bold text-white mb-2">Inferno</h2>
+                        <p class="text-sm text-red-200/70 italic line-clamp-2">"Lasciate ogne speranza, voi ch'intrate."</p>
+                        <div class="mt-4 flex items-center text-xs text-red-500 font-semibold tracking-wider uppercase group-hover:translate-x-2 transition-transform">
+                            Esplora i 34 Canti <i class="fa-solid fa-arrow-right-long ml-2"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CARD PURGATORIO -->
+                <div @click="selectCantica('purgatorio')" 
+                     class="group relative overflow-hidden rounded-2xl border border-emerald-950 bg-[#041a0d]/40 cursor-pointer transition-all duration-500 hover:shadow-2xl hover:shadow-emerald-950/60 hover:-translate-y-2 flex flex-col justify-end p-8 h-[400px] md:h-[480px]">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent z-10"></div>
+                    <img src="https://images.unsplash.com/photo-1447752875215-b2761acb3c5d?auto=format&fit=crop&q=80&w=600" 
+                         alt="Purgatorio" 
+                         class="absolute inset-0 w-full h-full object-cover opacity-20 group-hover:opacity-40 group-hover:scale-105 transition-all duration-700 ease-out z-0">
+                    <div class="relative z-20">
+                        <span class="text-xs uppercase tracking-[0.25em] text-emerald-400 font-bold mb-2 block">Cantica II</span>
+                        <h2 class="text-4xl font-dante-title font-bold text-white mb-2">Purgatorio</h2>
+                        <p class="text-sm text-emerald-200/70 italic line-clamp-2">"Libertà va cercando, ch'è sì cara..."</p>
+                        <div class="mt-4 flex items-center text-xs text-emerald-400 font-semibold tracking-wider uppercase group-hover:translate-x-2 transition-transform">
+                            Esplora i 33 Canti <i class="fa-solid fa-arrow-right-long ml-2"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CARD PARADISO -->
+                <div @click="selectCantica('paradiso')" 
+                     class="group relative overflow-hidden rounded-2xl border border-amber-950 bg-[#1a1404]/40 cursor-pointer transition-all duration-500 hover:shadow-2xl hover:shadow-amber-950/60 hover:-translate-y-2 flex flex-col justify-end p-8 h-[400px] md:h-[480px]">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent z-10"></div>
+                    <img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&q=80&w=600" 
+                         alt="Paradiso" 
+                         class="absolute inset-0 w-full h-full object-cover opacity-20 group-hover:opacity-40 group-hover:scale-105 transition-all duration-700 ease-out z-0">
+                    <div class="relative z-20">
+                        <span class="text-xs uppercase tracking-[0.25em] text-amber-400 font-bold mb-2 block">Cantica III</span>
+                        <h2 class="text-4xl font-dante-title font-bold text-white mb-2">Paradiso</h2>
+                        <p class="text-sm text-amber-200/70 italic line-clamp-2">"L'amor che move il sole e l'altre stelle."</p>
+                        <div class="mt-4 flex items-center text-xs text-amber-400 font-semibold tracking-wider uppercase group-hover:translate-x-2 transition-transform">
+                            Esplora i 33 Canti <i class="fa-solid fa-arrow-right-long ml-2"></i>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- SCHERMATA 2: WORKSPACE INTERATTIVO -->
+        <section x-show="screen === 'cantica'" 
+                 class="min-h-[calc(100vh-140px)] flex flex-col bg-gradient-to-b from-[#160406] via-[#0d0203] to-[#0d0203]">
+            
+            <div class="max-w-7xl mx-auto px-6 py-6 w-full flex-grow flex flex-col">
+                
+                <!-- Titolo Cantica -->
+                <div class="mb-6 border-b border-red-950/30 pb-4 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                    <div>
+                        <h2 class="text-3xl font-dante-title font-bold text-white uppercase tracking-wide flex items-center space-x-3">
+                            <span x-text="activeCantica"></span>
+                        </h2>
+                        <p class="text-xs text-red-300/40 uppercase tracking-widest mt-1" x-text="activeCantica === 'inferno' ? 'Per me si va ne la città dolente' : (activeCantica === 'purgatorio' ? 'E canterò di quel secondo regno' : 'La gloria di colui che tutto move')"></p>
+                    </div>
+
+                    <!-- Esportatore in Modalità Autore -->
+                    <div x-show="authorMode" class="bg-red-950/30 border border-red-900/40 p-3 rounded-xl flex items-center space-x-4 animate-bounce">
+                        <span class="text-xs text-red-200/80">Hai modificato i commenti?</span>
+                        <button @click="exportComments()" class="px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white rounded-lg text-xs font-bold transition-colors flex items-center space-x-1">
+                            <i class="fa-solid fa-file-export"></i>
+                            <span>Esporta commenti.json</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Griglia di navigazione -->
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 flex-grow items-stretch">
+                    
+                    <!-- COLONNA SINISTRA: Lista dei Canti (3/12) -->
+                    <div class="lg:col-span-3 flex flex-col space-y-4">
+                        <div class="bg-black/40 backdrop-blur-md rounded-2xl p-4 border border-red-950/30 flex flex-col h-[550px]">
+                            
+                            <!-- Ricerca Rapida Canto -->
+                            <div class="relative mb-4">
+                                <input type="text" x-model="searchCanto" placeholder="Cerca Canto (es: Canto V)..." 
+                                       class="w-full bg-[#1c080a] border border-red-950 text-sm rounded-xl px-3 py-2 text-white placeholder-red-300/30 focus:outline-none focus:border-red-500">
+                                <i class="fa-solid fa-magnifying-glass absolute right-3 top-2.5 text-xs text-red-500/40"></i>
+                            </div>
+
+                            <div class="overflow-y-auto pr-1 space-y-1.5 flex-grow">
+                                <template x-for="canto in filteredCanti" :key="canto.number">
+                                    <button @click="selectCanto(canto.number)" 
+                                            class="w-full text-left px-3.5 py-3 rounded-xl transition-all-300 border flex flex-col"
+                                            :class="selectedCanto && selectedCanto.number === canto.number 
+                                                ? 'bg-red-900/20 border-red-700 glow-red' 
+                                                : 'bg-[#150608]/20 border-transparent hover:bg-red-950/10 hover:border-red-950/40'">
+                                        <div class="flex justify-between items-center w-full">
+                                            <span class="font-dante-title font-semibold text-base text-white" x-text="canto.name"></span>
+                                            <i class="fa-solid fa-circle text-[8px]" :class="isCantoCommented(canto.number) ? 'text-red-500' : 'text-red-950/60'"></i>
+                                        </div>
+                                    </button>
+                                </template>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- COLONNA DESTRA: Lettore Interattivo (9/12) -->
+                    <div class="lg:col-span-9 flex flex-col">
+                        
+                        <!-- Stato Iniziale: Nessun Canto Selezionato -->
+                        <div x-show="!selectedCanto" class="bg-black/20 backdrop-blur-sm rounded-2xl p-12 border border-red-950/20 flex flex-col items-center justify-center text-center h-full min-h-[450px]">
+                            <div class="w-16 h-16 rounded-full bg-red-950/20 flex items-center justify-center mb-6 text-red-500 text-2xl">
+                                <i class="fa-solid fa-book-open"></i>
+                            </div>
+                            <h3 class="text-2xl font-dante-title font-semibold mb-2">Seleziona un Canto</h3>
+                            <p class="text-red-200/40 max-w-sm text-sm">Scegli uno dei canti dall'indice di sinistra per visualizzare i versi di Dante e inserire i tuoi commenti personali.</p>
+                        </div>
+
+                        <!-- Lettore Attivo -->
+                        <div x-show="selectedCanto" class="flex flex-col h-full space-y-4">
+                            
+                            <!-- Barra Navigazione Canto (Tab e info) -->
+                            <div class="flex flex-wrap justify-between items-center gap-4 bg-black/40 p-2.5 rounded-xl border border-red-950/20">
+                                <div class="flex space-x-2">
+                                    <button @click="activeTab = 'lettura'" 
+                                            class="px-4 py-1.5 rounded-lg text-xs font-semibold uppercase tracking-wider transition-all-300 flex items-center space-x-1.5"
+                                            :class="activeTab === 'lettura' ? 'bg-red-900/30 border border-red-800/40 text-white' : 'text-red-200/50 hover:text-red-300'">
+                                        <i class="fa-solid fa-scroll"></i>
+                                        <span>Testo & Commento</span>
+                                    </button>
+                                    <button @click="activeTab = 'personaggi'" 
+                                            class="px-4 py-1.5 rounded-lg text-xs font-semibold uppercase tracking-wider transition-all-300 flex items-center space-x-1.5"
+                                            :class="activeTab === 'personaggi' ? 'bg-red-900/30 border border-red-800/40 text-white' : 'text-red-200/50 hover:text-red-300'">
+                                        <i class="fa-solid fa-people-group"></i>
+                                        <span>Personaggi</span>
+                                    </button>
+                                </div>
+                                
+                                <span class="text-xs uppercase font-dante-title tracking-widest text-red-400" x-text="selectedCanto ? activeCantica + ' - ' + selectedCanto.name : ''"></span>
+                            </div>
+
+                            <!-- TAB 1: LETTURA E COMMENTO -->
+                            <div x-show="activeTab === 'lettura'" class="grid grid-cols-1 md:grid-cols-12 gap-6 items-stretch flex-grow">
+                                
+                                <!-- Sotto-colonna Versi (Testo di Dante) -->
+                                <div class="md:col-span-7 bg-black/40 rounded-2xl p-6 border border-red-950/20 flex flex-col h-[550px] overflow-y-auto">
+                                    <h4 class="text-xs uppercase tracking-widest text-red-300/30 font-bold mb-4 flex justify-between">
+                                        <span>Versi di Dante Alighieri</span>
+                                        <span class="text-[10px] text-red-500/70" x-text="'Totale Terzine: ' + (selectedCanto?.terzine?.length || 0)"></span>
+                                    </h4>
+                                    
+                                    <div class="space-y-4">
+                                        <template x-for="(terzina, index) in selectedCanto?.terzine" :key="index">
+                                            <div @click="activeTerzinaIndex = index"
+                                                 class="p-3.5 rounded-xl cursor-pointer transition-all-300 border group"
+                                                 :class="activeTerzinaIndex === index 
+                                                    ? 'bg-red-900/10 border-red-700/40 translate-x-1' 
+                                                    : 'bg-transparent border-transparent hover:bg-red-950/5 hover:border-red-950/10'">
+                                                
+                                                <div class="font-dante-verse text-base md:text-lg text-red-100/90 leading-relaxed whitespace-pre-line group-hover:text-white transition-colors"
+                                                     x-text="terzina.text"></div>
+                                                
+                                                <div class="mt-2 flex items-center justify-between text-[10px]">
+                                                    <span class="font-semibold text-red-500/50" x-text="'Terzina ' + (index + 1)"></span>
+                                                    <span class="text-red-300/40 flex items-center space-x-1">
+                                                        <i class="fa-solid" :class="getCommentForTerzina(index) ? 'fa-comment text-red-500/80' : 'fa-comment-slash opacity-40'"></i>
+                                                        <span x-text="getCommentForTerzina(index) ? 'Leggi commento' : 'Senza commento'"></span>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </template>
+                                    </div>
+                                </div>
+
+                                <!-- Sotto-colonna Commento o Scrittura -->
+                                <div class="md:col-span-5 flex flex-col">
+                                    <div class="bg-[#120305]/60 rounded-2xl p-6 border border-red-950/20 h-full flex flex-col justify-between min-h-[300px]">
+                                        
+                                        <div class="space-y-4 flex-grow flex flex-col">
+                                            <div class="flex items-center justify-between border-b border-red-950/30 pb-3">
+                                                <h4 class="text-xs uppercase tracking-widest text-red-300/60 font-bold flex items-center">
+                                                    <i class="fa-solid fa-feather-pointed mr-2 text-red-500"></i> Esposizione & Commento
+                                                </h4>
+                                                <span class="text-[10px] bg-red-950/50 text-red-400 px-2 py-0.5 rounded font-mono" 
+                                                      x-text="activeTerzinaIndex !== null ? 'Terzina ' + (activeTerzinaIndex + 1) : 'Seleziona'"></span>
+                                            </div>
+
+                                            <!-- Sezione di visualizzazione/modifica del commento -->
+                                            <div class="flex-grow flex flex-col justify-between space-y-4">
+                                                
+                                                <!-- Visualizzazione standard (Non-autore) o Testo fisso -->
+                                                <template x-if="activeTerzinaIndex !== null && !authorMode">
+                                                    <div class="space-y-3 flex-grow overflow-y-auto">
+                                                        <p class="text-sm italic text-red-300/40 font-dante-verse border-l-2 border-red-900/40 pl-3 py-1 line-clamp-2" 
+                                                           x-text="selectedCanto.terzine[activeTerzinaIndex].text.split('\n')[0] + '...'"></p>
+                                                        
+                                                        <div class="text-red-100/90 text-sm md:text-base leading-relaxed font-light whitespace-pre-wrap"
+                                                             x-html="getCommentForTerzina(activeTerzinaIndex) || '<span class=\'text-red-300/30 italic\'>Ancora nessun commento inserito per questa terzina. Abilita la Modalità Autore per scriverne uno!</span>'"></div>
+                                                    </div>
+                                                </template>
+
+                                                <!-- MODALITÀ AUTORE: Area di inserimento per i commenti -->
+                                                <template x-if="activeTerzinaIndex !== null && authorMode">
+                                                    <div class="space-y-3 flex-grow flex flex-col">
+                                                        <label class="text-[11px] uppercase tracking-wider text-red-400/80 font-semibold">Modifica commento per la Terzina <span x-text="activeTerzinaIndex + 1"></span></label>
+                                                        <textarea x-model="editingComments[activeTerzinaIndex]" 
+                                                                  placeholder="Scrivi qui il tuo commento o la spiegazione della terzina..."
+                                                                  class="w-full flex-grow bg-[#190608] border border-red-900/60 text-white p-3 rounded-xl text-sm focus:outline-none focus:border-red-500 resize-none min-h-[220px]"></textarea>
+                                                        <p class="text-[10px] text-red-300/30">Le modifiche vengono salvate localmente in tempo reale. Clicca su 'Esporta' in alto a destra per salvare il file.</p>
+                                                    </div>
+                                                </template>
+
+                                                <template x-if="activeTerzinaIndex === null">
+                                                    <div class="flex flex-col items-center justify-center py-16 text-center text-red-300/30">
+                                                        <i class="fa-regular fa-hand-pointer text-2xl mb-3 text-red-500/20"></i>
+                                                        <p class="text-xs">Seleziona una terzina a sinistra per visualizzarne il commento o per modificarlo.</p>
+                                                    </div>
+                                                </template>
+                                            </div>
+                                        </div>
+
+                                        <div class="border-t border-red-950/20 pt-4 mt-4 flex justify-between items-center text-[10px] text-red-300/30">
+                                            <span>Struttura dinamica attiva</span>
+                                            <i class="fa-solid fa-circle text-red-800"></i>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <!-- TAB 2: PERSONAGGI ED APPROFONDIMENTI -->
+                            <div x-show="activeTab === 'personaggi'" 
+                                 class="bg-[#120305]/40 rounded-2xl p-6 border border-red-950/20 min-h-[400px] flex flex-col justify-between">
+                                
+                                <div>
+                                    <div class="flex justify-between items-center mb-6">
+                                        <div>
+                                            <h4 class="text-xl font-dante-title font-semibold">I Personaggi del Canto</h4>
+                                            <p class="text-xs text-red-300/50">Inserisci e gestisci le figure allegoriche e i personaggi del Canto.</p>
+                                        </div>
+
+                                        <!-- Aggiunta nuovo personaggio in modalità Autore -->
+                                        <button x-show="authorMode" @click="addNewCharacter()" 
+                                                class="px-3 py-1.5 bg-red-900/40 border border-red-700/60 text-red-200 hover:bg-red-900/70 text-xs font-semibold rounded-lg transition-colors flex items-center space-x-1">
+                                            <i class="fa-solid fa-plus"></i>
+                                            <span>Aggiungi Personaggio</span>
+                                        </button>
+                                    </div>
+
+                                    <!-- Lista personaggi -->
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        
+                                        <!-- Se vuoto -->
+                                        <template x-if="!getActiveCantoCharacters().length">
+                                            <div class="col-span-2 text-center py-12 text-red-300/30 text-sm italic">
+                                                Nessun personaggio registrato per questo canto.
+                                            </div>
+                                        </template>
+
+                                        <!-- Loop Personaggi -->
+                                        <template x-for="(char, index) in getActiveCantoCharacters()" :key="index">
+                                            <div class="p-4 rounded-xl bg-red-950/5 border border-red-950/40 relative flex items-start space-x-3.5">
+                                                
+                                                <div class="w-10 h-10 rounded-lg bg-red-950/40 border border-red-900/30 flex items-center justify-center text-red-400">
+                                                    <i class="fa-solid" :class="char.icon || 'fa-user'"></i>
+                                                </div>
+
+                                                <div class="space-y-1 flex-grow">
+                                                    <!-- Visualizzazione Standard -->
+                                                    <template x-if="!authorMode">
+                                                        <div>
+                                                            <h5 class="text-sm font-bold text-white" x-text="char.name"></h5>
+                                                            <span class="text-[10px] text-red-400 font-semibold uppercase tracking-wider" x-text="char.role"></span>
+                                                            <p class="text-xs text-red-200/60 pt-1.5" x-text="char.bio"></p>
+                                                        </div>
+                                                    </template>
+
+                                                    <!-- Modifica in Modalità Autore -->
+                                                    <template x-if="authorMode">
+                                                        <div class="space-y-2">
+                                                            <input type="text" x-model="char.name" placeholder="Nome Personaggio" class="w-full bg-[#1c0608] border border-red-950 p-1 text-xs rounded text-white">
+                                                            <input type="text" x-model="char.role" placeholder="Ruolo/Significato" class="w-full bg-[#1c0608] border border-red-950 p-1 text-[10px] rounded text-red-400 font-semibold">
+                                                            <textarea x-model="char.bio" placeholder="Biografia o spiegazione dantesca..." class="w-full bg-[#1c0608] border border-red-950 p-1 text-xs rounded text-red-200/85 h-16 resize-none"></textarea>
+                                                            
+                                                            <!-- Icon selector rapido -->
+                                                            <div class="flex items-center space-x-2 text-[10px] text-red-300/40">
+                                                                <span>Icona:</span>
+                                                                <select x-model="char.icon" class="bg-[#1c0608] border border-red-950 rounded text-red-400">
+                                                                    <option value="fa-user">Uomo/Default</option>
+                                                                    <option value="fa-venus">Donna</option>
+                                                                    <option value="fa-crown">Nobile/Regale</option>
+                                                                    <option value="fa-shield-halved">Guerriero/Custode</option>
+                                                                    <option value="fa-gavel">Giudice</option>
+                                                                    <option value="fa-ghost">Spirito/Demone</option>
+                                                                    <option value="fa-paw">Animale/Fiera</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </template>
+                                                </div>
+
+                                                <!-- Elimina in Modalità Autore -->
+                                                <button x-show="authorMode" @click="deleteCharacter(index)" 
+                                                        class="absolute top-2 right-2 text-red-800 hover:text-red-500 transition-colors">
+                                                    <i class="fa-solid fa-trash text-xs"></i>
+                                                </button>
+                                            </div>
+                                        </template>
+
+                                    </div>
+                                </div>
+
+                                <div class="mt-8 text-[11px] text-red-400/40 italic">
+                                    I personaggi modificati verranno inseriti nell'esportazione finale del file commenti.json.
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="border-t border-red-950/20 bg-[#0d0203] py-6 text-center text-[11px] text-red-300/30 space-y-2">
+        <p>© 2026 - Divina Commedia Commentata - Struttura Autonoma Dinamica.</p>
+        <p class="flex items-center justify-center space-x-4">
+            <span class="hover:text-red-400 cursor-pointer" @click="goHome()"><i class="fa-solid fa-home"></i> Home</span>
+            <span>•</span>
+            <span class="hover:text-red-400 cursor-pointer" @click="selectCantica('inferno')">Inferno</span>
+            <span>•</span>
+            <span class="hover:text-emerald-400 cursor-pointer" @click="selectCantica('purgatorio')">Purgatorio</span>
+            <span>•</span>
+            <span class="hover:text-amber-400 cursor-pointer" @click="selectCantica('paradiso')">Paradiso</span>
+        </p>
+    </footer>
+
+    <!-- ALPINE LOGICA DI GESTIONE STATO -->
+    <script>
+        function commediaApp() {
+            return {
+                screen: 'home',            // Schermate: 'home', 'cantica'
+                activeCantica: null,       // 'inferno', 'purgatorio', 'paradiso'
+                selectedCanto: null,       // Canto corrente elaborato
+                activeTerzinaIndex: null,  // Indice della terzina attiva
+                activeTab: 'lettura',      // Tab interna: 'lettura', 'personaggi'
+                authorMode: false,         // Controllo per attivare l'inserimento dei commenti
+                loading: false,            // Stato caricamento database
+                searchCanto: '',           // Filtro di ricerca canti
+
+                rawCommediaData: null,     // Intero testo della Commedia scaricato dal CDN
+                userComments: {},          // Tutti i commenti e i personaggi inseriti dall'utente
+                editingComments: [],       // Array temporaneo per l'editing del canto attivo
+
+                // Caricamento del database all'avvio dell'applicazione
+                async initApp() {
+                    this.loading = true;
+                    try {
+                        // Scarichiamo l'intero testo di Dante formattato in JSON
+                        const response = await fetch('https://cdn.jsdelivr.net/gh/fabiovalse/Divina-Commedia-Visualization@master/divina_commedia.json');
+                        this.rawCommediaData = await response.json();
+                        
+                        // Tentiamo di scaricare il file commenti.json dallo stesso percorso in cui risiede il sito
+                        await this.loadLocalComments();
+                    } catch (error) {
+                        console.error("Errore nel recupero dei dati:", error);
+                    } finally {
+                        this.loading = false;
+                    }
+                },
+
+                // Tentiamo di caricare i commenti locali se presenti
+                async loadLocalComments() {
+                    try {
+                        const response = await fetch('./commenti.json');
+                        if (response.ok) {
+                            this.userComments = await response.json();
+                        } else {
+                            console.log("Nessun file commenti.json personalizzato rilevato. Avvio con database vuoto.");
+                        }
+                    } catch (e) {
+                        console.log("Nessun file commenti.json trovato o errore nel parsing. Pronto per nuove creazioni.");
+                    }
+                },
+
+                // Reset e ritorno alla home
+                goHome() {
+                    this.screen = 'home';
+                    this.activeCantica = null;
+                    this.selectedCanto = null;
+                    this.activeTerzinaIndex = null;
+                    this.searchCanto = '';
+                },
+
+                // Seleziona la Cantica e imposta l'indice
+                selectCantica(canticaKey) {
+                    this.activeCantica = canticaKey;
+                    this.screen = 'cantica';
+                    this.selectedCanto = null;
+                    this.activeTerzinaIndex = null;
+                    this.activeTab = 'lettura';
+                },
+
+                // Getter per filtrare i canti
+                get filteredCanti() {
+                    if (!this.rawCommediaData || !this.activeCantica) return [];
+                    
+                    // Identifica l'indice corretto del volume
+                    let volumeIndex = this.activeCantica === 'inferno' ? 0 : (this.activeCantica === 'purgatorio' ? 1 : 2);
+                    let volume = this.rawCommediaData.children[volumeIndex];
+                    
+                    let cantiList = volume.children.map((canto, index) => {
+                        return {
+                            number: index + 1,
+                            name: canto.name
+                        };
+                    });
+
+                    if (this.searchCanto.trim() !== '') {
+                        return cantiList.filter(c => c.name.toLowerCase().includes(this.searchCanto.toLowerCase()));
+                    }
+
+                    return cantiList;
+                },
+
+                // Costruisce la visualizzazione di un singolo canto mappando i versi originari
+                selectCanto(cantoNumber) {
+                    let volumeIndex = this.activeCantica === 'inferno' ? 0 : (this.activeCantica === 'purgatorio' ? 1 : 2);
+                    let rawCanto = this.rawCommediaData.children[volumeIndex].children[cantoNumber - 1];
+
+                    // Costruiamo la lista delle terzine
+                    let parsedTerzine = [];
+                    rawCanto.children.forEach(terzina => {
+                        if (terzina.type === "Terzina") {
+                            let versesText = terzina.children.map(v => v.text).join('\n');
+                            parsedTerzine.push({
+                                number: terzina.number,
+                                text: versesText
+                            });
+                        }
+                    });
+
+                    this.selectedCanto = {
+                        number: cantoNumber,
+                        name: rawCanto.name,
+                        terzine: parsedTerzine
+                    };
+
+                    this.activeTerzinaIndex = 0;
+                    this.activeTab = 'lettura';
+
+                    // Prepariamo l'editing dei commenti
+                    this.syncEditingComments();
+                },
+
+                // Sincronizza lo stato dei commenti in modifica
+                syncEditingComments() {
+                    this.editingComments = [];
+                    if (!this.selectedCanto) return;
+
+                    let canticaKey = this.activeCantica;
+                    let cantoNum = this.selectedCanto.number;
+
+                    for (let i = 0; i < this.selectedCanto.terzine.length; i++) {
+                        let savedComment = "";
+                        if (this.userComments[canticaKey] && 
+                            this.userComments[canticaKey][cantoNum] && 
+                            this.userComments[canticaKey][cantoNum].terzine) {
+                            savedComment = this.userComments[canticaKey][cantoNum].terzine[i] || "";
+                        }
+                        this.editingComments.push(savedComment);
+                    }
+                },
+
+                // Salva lo stato in tempo reale quando l'utente scrive
+                saveRealtimeComments() {
+                    if (!this.selectedCanto) return;
+                    let canticaKey = this.activeCantica;
+                    let cantoNum = this.selectedCanto.number;
+
+                    if (!this.userComments[canticaKey]) {
+                        this.userComments[canticaKey] = {};
+                    }
+                    if (!this.userComments[canticaKey][cantoNum]) {
+                        this.userComments[canticaKey][cantoNum] = { terzine: {}, characters: [] };
+                    }
+
+                    // Aggiorna le terzine
+                    this.editingComments.forEach((comment, index) => {
+                        if (comment && comment.trim() !== "") {
+                            this.userComments[canticaKey][cantoNum].terzine[index] = comment;
+                        } else {
+                            delete this.userComments[canticaKey][cantoNum].terzine[index];
+                        }
+                    });
+                },
+
+                // Recupera il commento salvato
+                getCommentForTerzina(index) {
+                    if (!this.selectedCanto) return null;
+                    let canticaKey = this.activeCantica;
+                    let cantoNum = this.selectedCanto.number;
+
+                    if (this.userComments[canticaKey] && 
+                        this.userComments[canticaKey][cantoNum] && 
+                        this.userComments[canticaKey][cantoNum].terzine) {
+                        return this.userComments[canticaKey][cantoNum].terzine[index] || null;
+                    }
+                    return null;
+                },
+
+                // Indica se un canto ha almeno un commento inserito
+                isCantoCommented(cantoNumber) {
+                    let canticaKey = this.activeCantica;
+                    if (this.userComments[canticaKey] && this.userComments[canticaKey][cantoNumber]) {
+                        let cantoData = this.userComments[canticaKey][cantoNumber];
+                        let hasTerzine = Object.keys(cantoData.terzine || {}).length > 0;
+                        let hasChars = (cantoData.characters || []).length > 0;
+                        return hasTerzine || hasChars;
+                    }
+                    return false;
+                },
+
+                // Attiva o disattiva la modalità scrittore
+                toggleAuthorMode() {
+                    if (this.authorMode) {
+                        // Se usciamo dalla modalità autore, memorizziamo le modifiche finali
+                        this.saveRealtimeComments();
+                        this.authorMode = false;
+                    } else {
+                        this.authorMode = true;
+                        this.syncEditingComments();
+                    }
+                },
+
+                // --- GESTIONE PERSONAGGI ---
+                getActiveCantoCharacters() {
+                    if (!this.selectedCanto) return [];
+                    let canticaKey = this.activeCantica;
+                    let cantoNum = this.selectedCanto.number;
+
+                    if (this.userComments[canticaKey] && 
+                        this.userComments[canticaKey][cantoNum] && 
+                        this.userComments[canticaKey][cantoNum].characters) {
+                        return this.userComments[canticaKey][cantoNum].characters;
+                    }
+                    return [];
+                },
+
+                addNewCharacter() {
+                    if (!this.selectedCanto) return;
+                    let canticaKey = this.activeCantica;
+                    let cantoNum = this.selectedCanto.number;
+
+                    if (!this.userComments[canticaKey]) this.userComments[canticaKey] = {};
+                    if (!this.userComments[canticaKey][cantoNum]) this.userComments[canticaKey][cantoNum] = { terzine: {}, characters: [] };
+                    if (!this.userComments[canticaKey][cantoNum].characters) this.userComments[canticaKey][cantoNum].characters = [];
+
+                    this.userComments[canticaKey][cantoNum].characters.push({
+                        name: "Nuovo Personaggio",
+                        role: "Ruolo",
+                        bio: "Descrizione...",
+                        icon: "fa-user"
+                    });
+                },
+
+                deleteCharacter(index) {
+                    let chars = this.getActiveCantoCharacters();
+                    if (chars) {
+                        chars.splice(index, 1);
+                    }
+                },
+
+                // --- ESPORTAZIONE FINALE ---
+                exportComments() {
+                    // Assicuriamoci di salvare lo stato corrente prima di esportare
+                    this.saveRealtimeComments();
+
+                    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(this.userComments, null, 2));
+                    const downloadAnchor = document.createElement('a');
+                    downloadAnchor.setAttribute("href", dataStr);
+                    downloadAnchor.setAttribute("download", "commenti.json");
+                    document.body.appendChild(downloadAnchor);
+                    downloadAnchor.click();
+                    downloadAnchor.remove();
+                }
+            }
+        }
+    </script>
+</body>
+</html>
