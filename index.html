@@ -134,11 +134,11 @@
 
             <div v-if="currentCantica" class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
                 
-                <!-- COLONNA DI SINISTRA (Lista dei 33-34 Canti) -->
+                <!-- COLONNA DI SINISTRA (Lista dei Canti) -->
                 <div class="lg:col-span-3 bg-black/60 border border-red-950/40 rounded-xl p-4 max-h-[80vh] overflow-y-auto backdrop-blur">
                     <div class="flex items-center justify-between mb-4 pb-2 border-b border-red-950/60">
                         <h4 class="font-cinzel text-lg font-bold text-red-400">{{ currentCantica.toUpperCase() }}</h4>
-                        <span class="text-xs px-2 py-0.5 bg-red-950/40 text-red-200 border border-red-900/30 rounded">33 Canti</span>
+                        <span class="text-xs px-2 py-0.5 bg-red-950/40 text-red-200 border border-red-900/30 rounded">Canti</span>
                     </div>
                     
                     <ul class="space-y-1">
@@ -202,10 +202,14 @@
                                     <div v-if="getCommentForTercet(tIdx)" class="mt-2 text-xs flex items-center text-red-400/80 gap-1 font-sans">
                                         <i class="fa-solid fa-comment-dots text-red-600"></i> Tuo commento salvato
                                     </div>
+                                    <div v-if="hasOverriddenVerses(tIdx)" class="mt-1 text-[10px] flex items-center text-amber-500/80 gap-1 font-sans">
+                                        <i class="fa-solid fa-spell-check"></i> Testo corretto da te
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
+                        <!-- Pannello di destra: Commenti e Editor Correzioni -->
                         <div class="md:col-span-5 flex flex-col gap-4">
                             
                             <!-- Scheda del commento -->
@@ -234,23 +238,47 @@
                                         </div>
                                     </div>
 
-                                    <!-- Sezione Editor per la Modalità Autore -->
+                                    <!-- Sezione Editor per la Modalità Autore (Commenti + Correzione Refusi) -->
                                     <div v-else>
-                                        <div v-if="selectedTercetIndex !== null" class="flex flex-col gap-3">
-                                            <label class="text-xs text-red-300 font-sans">Scrivi qui sotto il tuo commento o parafrasi:</label>
-                                            <textarea v-model="authorEditingComment" rows="8" class="w-full bg-black/80 border border-red-900 rounded p-3 text-red-50 text-sm font-sans focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 resize-none" placeholder="Inserisci il tuo commento..."></textarea>
-                                            <button @click="saveTercetComment" class="w-full py-2 bg-red-800 text-white rounded font-cinzel text-xs hover:bg-red-700 transition">
-                                                Salva Commento Terzina {{ selectedTercetIndex + 1 }}
-                                            </button>
+                                        <div v-if="selectedTercetIndex !== null" class="flex flex-col gap-4">
+                                            
+                                            <!-- EDITOR DEI COMMENTI -->
+                                            <div class="flex flex-col gap-2">
+                                                <label class="text-xs text-red-300 font-sans">Scrivi qui sotto il tuo commento o parafrasi:</label>
+                                                <textarea v-model="authorEditingComment" rows="6" class="w-full bg-black/80 border border-red-900 rounded p-3 text-red-50 text-sm font-sans focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 resize-none" placeholder="Inserisci il tuo commento..."></textarea>
+                                                <button @click="saveTercetComment" class="w-full py-2 bg-red-800 text-white rounded font-cinzel text-xs hover:bg-red-700 transition">
+                                                    Salva Commento Terzina {{ selectedTercetIndex + 1 }}
+                                                </button>
+                                            </div>
+
+                                            <!-- SEZIONE CORREZIONE REFUSI -->
+                                            <div class="border-t border-red-950/60 pt-4 mt-2">
+                                                <button @click="showRefusiSection = !showRefusiSection" class="w-full flex justify-between items-center text-xs text-amber-500 hover:text-amber-400 font-cinzel transition">
+                                                    <span><i class="fa-solid fa-spell-check mr-1"></i> Correggi testo della terzina (Refusi)</span>
+                                                    <i :class="showRefusiSection ? 'fa-solid fa-chevron-up' : 'fa-solid fa-chevron-down'"></i>
+                                                </button>
+
+                                                <div v-if="showRefusiSection" class="mt-3 space-y-2 bg-black/40 p-3 rounded border border-amber-950/40">
+                                                    <p class="text-[10px] text-amber-400/70 font-sans mb-2">Modifica i versi qui sotto per correggere errori ortografici o refusi del database:</p>
+                                                    <div v-for="(line, idx) in editingVersesLines" :key="idx" class="flex items-center gap-2">
+                                                        <span class="text-[10px] font-mono text-amber-600 w-4">{{ idx + 1 }}</span>
+                                                        <input type="text" v-model="editingVersesLines[idx]" class="w-full bg-black/80 border border-amber-950/60 rounded p-1.5 text-xs text-amber-100 font-serif focus:outline-none focus:border-amber-500">
+                                                    </div>
+                                                    <button @click="saveTercetVerses" class="w-full mt-2 py-1.5 bg-amber-900/60 text-amber-100 hover:bg-amber-900 rounded font-cinzel text-[11px] border border-amber-800 transition">
+                                                        Salva Versi Corretti
+                                                    </button>
+                                                </div>
+                                            </div>
+
                                         </div>
                                         <div v-else class="text-red-400/50 text-sm italic py-8 text-center font-sans">
-                                            Seleziona una terzina a sinistra per modificarne il commento.
+                                            Seleziona una terzina a sinistra per modificarne il commento o correggerne i versi.
                                         </div>
                                     </div>
                                 </div>
                                 
                                 <div class="mt-4 pt-4 border-t border-red-950/40 text-[10px] text-red-400/60 font-sans flex items-center justify-between">
-                                    <span>Tutti i versi e i commenti salvati risiedono sul tuo browser finché non esporti.</span>
+                                    <span>Tutti i dati e le correzioni salvati risiedono sul tuo browser finché non esporti.</span>
                                 </div>
                             </div>
 
@@ -334,7 +362,7 @@
             <div class="bg-black border border-red-900 rounded-xl p-6 max-w-md w-full shadow-2xl shadow-red-950/60">
                 <div class="flex justify-between items-center pb-3 border-b border-red-950/40 mb-4">
                     <h3 class="font-cinzel text-lg font-bold text-red-100">Aggiungi Personaggio</h3>
-                    <button @click="showAddCharacterModal = false" class="text-red-500 hover:text-red-300"><i class="fa-solid fa-times"></i></button>
+                    <button @click="showAddCharacterModal = false" class="text-red-50 hover:text-red-300"><i class="fa-solid fa-times"></i></button>
                 </div>
 
                 <div class="space-y-4 font-sans text-xs">
@@ -367,12 +395,17 @@
 
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script>
-        const { createApp, ref, onMounted, watch } = Vue;
+        // ==========================================
+        // CONFIGURAZIONE PASSWORD: CAMBIA 'dante2026' CON LA TUA PASSWORD PERSONALE
+        const PASSWORD_AUTORE_CONFIG = 'dante2026';
+        // ==========================================
+
+        const { createApp, ref, onMounted } = Vue;
 
         createApp({
             setup() {
-                // Configurazione della password d'autore
-                const authorPassword = 'D2A0n2T6e'; // <--- Cambia 'dante2026' con la password che preferisci!
+                // Recupera la password dalla configurazione
+                const authorPassword = PASSWORD_AUTORE_CONFIG;
 
                 // Stati di navigazione e gestione
                 const currentCantica = ref(null);
@@ -390,7 +423,11 @@
 
                 // Modifica dei commenti d'autore
                 const authorEditingComment = ref('');
-                const commentiDatabase = ref({}); // Salverà la mappa [cantica][cantoNum][tercetIndex] = commento
+                const commentiDatabase = ref({}); // Salverà la mappa [cantica][cantoNum] = { comments: {}, characters: [], verses: {} }
+
+                // Correzione versi
+                const showRefusiSection = ref(false);
+                const editingVersesLines = ref(['', '', '']);
 
                 // Gestione Personaggi
                 const showAddCharacterModal = ref(false);
@@ -399,7 +436,7 @@
                 // Vettore per i versi strutturati del canto attuale
                 const currentCantoVerses = ref([]);
 
-                // URL CDN per l'intero archivio strutturato della Commedia (Wikisource pulito)
+                // URL CDN per l'intero archivio strutturato della Commedia
                 const COMMEDIA_JSON_URL = 'https://raw.githubusercontent.com/fabiovalse/Divina-Commedia-Visualization/master/divina_commedia.json';
 
                 // Inizializzazione applicazione e recupero cache o file commenti.json esterno
@@ -419,7 +456,7 @@
                         console.error("Errore nel caricamento del database grezzo della Commedia:", err);
                     }
 
-                    // Carica i commenti esistenti (file commenti.json nel tuo repository)
+                    // Carica i commenti esistenti e le correzioni
                     try {
                         const responseComments = await fetch('./commenti.json');
                         if (responseComments.ok) {
@@ -460,27 +497,24 @@
                 };
 
                 const shouldShowCanto = (cantoNum) => {
-                    // L'Inferno ha 34 canti (Canto I è l'introduzione), Purgatorio e Paradiso ne hanno 33
+                    // L'Inferno ha 34 canti, Purgatorio e Paradiso ne hanno 33
                     if (currentCantica.value === 'Inferno') return cantoNum <= 34;
                     return cantoNum <= 33;
                 };
 
-                // Carica e pulisce i testi originali per visualizzarli in terzine
+                // Carica e pulisce i testi originali applicando eventuali correzioni di refusi
                 const loadCantoText = async () => {
                     if (!rawCommediaData.value) return;
                     isLoadingCanto.value = true;
                     currentCantoVerses.value = [];
 
                     try {
-                        // Cerca la cantica adatta (Inferno, Purgatorio, Paradiso)
                         const volume = rawCommediaData.value.children.find(vol => vol.name.toLowerCase() === currentCantica.value.toLowerCase());
                         if (volume) {
-                            // Adatta l'indice del Canto per far corrispondere i nomi dei canti
                             const targetCantoName = `Canto ${getRomanNumeral(selectedCantoNum.value)}`;
                             const canto = volume.children.find(c => c.name.trim() === targetCantoName || c.name.trim() === `Canto ${selectedCantoNum.value}`);
                             
                             if (canto) {
-                                // Raggruppa i versi estratti in terzine ordinate
                                 const groupedVerses = [];
                                 canto.children.forEach(terzinaNode => {
                                     if (terzinaNode.children) {
@@ -488,6 +522,18 @@
                                         groupedVerses.push(tercetLines);
                                     }
                                 });
+
+                                // Applica i versi corretti dall'utente se presenti nel database locale/caricato
+                                const key = getCommentKey();
+                                if (commentiDatabase.value[key] && commentiDatabase.value[key].verses) {
+                                    Object.keys(commentiDatabase.value[key].verses).forEach(tIdx => {
+                                        const parsedIndex = parseInt(tIdx);
+                                        if (groupedVerses[parsedIndex]) {
+                                            groupedVerses[parsedIndex] = [...commentiDatabase.value[key].verses[parsedIndex]];
+                                        }
+                                    });
+                                }
+
                                 currentCantoVerses.value = groupedVerses;
                             }
                         }
@@ -498,9 +544,18 @@
                     }
                 };
 
+                // Selezione di una singola terzina per visualizzare/modificare commenti e refusi
                 const selectTercet = (tIdx) => {
                     selectedTercetIndex.value = tIdx;
                     authorEditingComment.value = getCommentForTercet(tIdx) || '';
+                    showRefusiSection.value = false;
+
+                    // Inizializza i versi in fase di correzione
+                    if (currentCantoVerses.value[tIdx]) {
+                        editingVersesLines.value = [...currentCantoVerses.value[tIdx]];
+                    } else {
+                        editingVersesLines.value = ['', '', ''];
+                    }
                 };
 
                 const getCommentKey = () => {
@@ -516,6 +571,14 @@
                     return '';
                 };
 
+                const hasOverriddenVerses = (tIdx) => {
+                    const key = getCommentKey();
+                    if (commentiDatabase.value[key] && commentiDatabase.value[key].verses) {
+                        return !!commentiDatabase.value[key].verses[tIdx];
+                    }
+                    return false;
+                };
+
                 const hasComments = (cantoNum) => {
                     if (!currentCantica.value) return false;
                     const key = `${currentCantica.value.toLowerCase()}_${cantoNum}`;
@@ -523,34 +586,68 @@
                     if (cantoObj) {
                         const hasAnyComment = Object.values(cantoObj.comments || {}).some(c => c.trim() !== '');
                         const hasAnyChar = (cantoObj.characters || []).length > 0;
-                        return hasAnyComment || hasAnyChar;
+                        const hasAnyOverride = Object.values(cantoObj.verses || {}).length > 0;
+                        return hasAnyComment || hasAnyChar || hasAnyOverride;
                     }
                     return false;
                 };
 
+                // Salva il commento scritto dall'autore
                 const saveTercetComment = () => {
                     if (selectedTercetIndex.value === null) return;
                     const key = getCommentKey();
                     
                     if (!commentiDatabase.value[key]) {
-                        commentiDatabase.value[key] = { comments: {}, characters: [] };
+                        commentiDatabase.value[key] = { comments: {}, characters: [], verses: {} };
+                    }
+                    if (!commentiDatabase.value[key].comments) {
+                        commentiDatabase.value[key].comments = {};
                     }
                     
                     commentiDatabase.value[key].comments[selectedTercetIndex.value] = authorEditingComment.value;
+                    saveToLocalStorage();
+                    showSaveNotification(`Commento terzina ${selectedTercetIndex.value + 1} salvato localmente!`);
+                };
+
+                // Salva le correzioni dei versi inserite dall'autore
+                const saveTercetVerses = () => {
+                    if (selectedTercetIndex.value === null) return;
+                    const key = getCommentKey();
+
+                    if (!commentiDatabase.value[key]) {
+                        commentiDatabase.value[key] = { comments: {}, characters: [], verses: {} };
+                    }
+                    if (!commentiDatabase.value[key].verses) {
+                        commentiDatabase.value[key].verses = {};
+                    }
+
+                    // Salva la modifica dei versi nella mappa persistente
+                    commentiDatabase.value[key].verses[selectedTercetIndex.value] = [...editingVersesLines.value];
                     
-                    // Salva in localStorage locale del browser come backup immediato
+                    // Aggiorna istantaneamente la visualizzazione a schermo
+                    currentCantoVerses.value[selectedTercetIndex.value] = [...editingVersesLines.value];
+
+                    saveToLocalStorage();
+                    showSaveNotification(`Versi corretti salvati per la terzina ${selectedTercetIndex.value + 1}!`);
+                };
+
+                const saveToLocalStorage = () => {
                     localStorage.setItem('commedia_commenti_locali', JSON.stringify(commentiDatabase.value));
-                    
-                    alert(`Commento per la terzina ${selectedTercetIndex.value + 1} salvato localmente con successo!`);
+                };
+
+                const showSaveNotification = (message) => {
+                    const notification = document.createElement('div');
+                    notification.className = "fixed bottom-4 right-4 bg-emerald-800 text-white px-4 py-2 rounded shadow-lg border border-emerald-600 text-xs font-cinzel z-50 animate-bounce";
+                    notification.innerText = message;
+                    document.body.appendChild(notification);
+                    setTimeout(() => notification.remove(), 3000);
                 };
 
                 const toggleAuthorMode = () => {
                     if (isAuthorUnlocked.value) {
-                        // Se è già sbloccata, la blocca disconnettendo l'utente
                         isAuthorUnlocked.value = false;
                         localStorage.removeItem('isAuthorUnlocked');
                     } else {
-                        // Altrimenti apre il popup per l'immissione della password
                         showPasswordModal.value = true;
                         passwordInput.value = '';
                         passwordError.value = false;
@@ -590,7 +687,7 @@
                     const key = getCommentKey();
 
                     if (!commentiDatabase.value[key]) {
-                        commentiDatabase.value[key] = { comments: {}, characters: [] };
+                        commentiDatabase.value[key] = { comments: {}, characters: [], verses: {} };
                     }
                     if (!commentiDatabase.value[key].characters) {
                         commentiDatabase.value[key].characters = [];
@@ -603,8 +700,7 @@
                         icon: newChar.value.icon || 'fa-user'
                     });
 
-                    // Backup locale
-                    localStorage.setItem('commedia_commenti_locali', JSON.stringify(commentiDatabase.value));
+                    saveToLocalStorage();
 
                     // Resetta il modulo
                     newChar.value = { name: '', role: '', bio: '', icon: '' };
@@ -615,7 +711,7 @@
                     const key = getCommentKey();
                     if (commentiDatabase.value[key] && commentiDatabase.value[key].characters) {
                         commentiDatabase.value[key].characters.splice(index, 1);
-                        localStorage.setItem('commedia_commenti_locali', JSON.stringify(commentiDatabase.value));
+                        saveToLocalStorage();
                     }
                 };
 
@@ -629,7 +725,7 @@
                     downloadAnchorNode.remove();
                 };
 
-                // Helper numerici romani per il parsing dei canti su Wikisource
+                // Helper numerici romani per il parsing dei canti
                 const getRomanNumeral = (num) => {
                     const lookup = {M:1000,CM:900,D:500,CD:400,C:100,XC:90,L:50,XL:40,X:10,IX:9,V:5,IV:4,I:1};
                     let roman = '';
@@ -656,14 +752,18 @@
                     currentCantoVerses,
                     showAddCharacterModal,
                     newChar,
+                    showRefusiSection,
+                    editingVersesLines,
                     selectCantica,
                     resetToHome,
                     selectCanto,
                     shouldShowCanto,
                     selectTercet,
                     getCommentForTercet,
+                    hasOverriddenVerses,
                     hasComments,
                     saveTercetComment,
+                    saveTercetVerses,
                     toggleAuthorMode,
                     verifyPassword,
                     getCurrentCharacters,
