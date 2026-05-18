@@ -82,7 +82,7 @@
 
         <main class="flex-grow max-w-7xl w-full mx-auto p-4 md:p-8">
             
-            <!-- SCHERMATA 1: HOME PAGE (Scelta delle tre Cantiche) -->
+            <!-- SCHERMATA 1: HOME PAGE (Scelta delle tre Cantiche con Immagini d'Autore Adattate) -->
             <div v-if="!currentCantica" class="py-12 flex flex-col items-center justify-center">
                 <div class="text-center mb-16 max-w-2xl px-4">
                     <h2 class="text-3xl md:text-5xl font-cinzel font-black tracking-widest text-red-500 mb-4">IL DIVINO CAMMINO</h2>
@@ -260,9 +260,9 @@
 
                                                 <div v-if="showRefusiSection" class="mt-3 space-y-2 bg-black/40 p-3 rounded border border-amber-950/40">
                                                     <p class="text-[10px] text-amber-400/70 font-sans mb-2">Modifica i versi qui sotto per correggere errori ortografici o refusi del database:</p>
-                                                    <div v-for="(line, idx) in editingVersesLines" :key="idx" class="flex items-center gap-2">
+                                                    <div v-for="(lineItem, idx) in editingVersesLines" :key="idx" class="flex items-center gap-2">
                                                         <span class="text-[10px] font-mono text-amber-600 w-4">{{ idx + 1 }}</span>
-                                                        <input type="text" v-model="editingVersesLines[idx]" class="w-full bg-black/80 border border-amber-950/60 rounded p-1.5 text-xs text-amber-100 font-serif focus:outline-none focus:border-amber-500">
+                                                        <input type="text" v-model="lineItem.text" class="w-full bg-black/80 border border-amber-950/60 rounded p-1.5 text-xs text-amber-100 font-serif focus:outline-none focus:border-amber-500">
                                                     </div>
                                                     <button @click="saveTercetVerses" class="w-full mt-2 py-1.5 bg-amber-900/60 text-amber-100 hover:bg-amber-900 rounded font-cinzel text-[11px] border border-amber-800 transition">
                                                         Salva Versi Corretti
@@ -396,8 +396,8 @@
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script>
         // ==========================================
-        // CONFIGURAZIONE PASSWORD: CAMBIA 'dante2026' CON LA TUA PASSWORD PERSONALE
-        const PASSWORD_AUTORE_CONFIG = 'dante2026';
+        // CONFIGURAZIONE PASSWORD: CAMBIA LA PASSWORD QUI SOTTO
+        const PASSWORD_AUTORE_CONFIG = 'D2A0n2T6e';
         // ==========================================
 
         const { createApp, ref, onMounted } = Vue;
@@ -425,9 +425,9 @@
                 const authorEditingComment = ref('');
                 const commentiDatabase = ref({}); // Salverà la mappa [cantica][cantoNum] = { comments: {}, characters: [], verses: {} }
 
-                // Correzione versi
+                // Correzione versi danteschi (strutturati come array di oggetti per evitare la perdita di focus)
                 const showRefusiSection = ref(false);
-                const editingVersesLines = ref(['', '', '']);
+                const editingVersesLines = ref([]);
 
                 // Gestione Personaggi
                 const showAddCharacterModal = ref(false);
@@ -550,11 +550,11 @@
                     authorEditingComment.value = getCommentForTercet(tIdx) || '';
                     showRefusiSection.value = false;
 
-                    // Inizializza i versi in fase di correzione
+                    // Inizializza i versi in fase di correzione con un array di oggetti per la massima stabilità del v-model
                     if (currentCantoVerses.value[tIdx]) {
-                        editingVersesLines.value = [...currentCantoVerses.value[tIdx]];
+                        editingVersesLines.value = currentCantoVerses.value[tIdx].map(line => ({ text: line }));
                     } else {
-                        editingVersesLines.value = ['', '', ''];
+                        editingVersesLines.value = [{ text: '' }, { text: '' }, { text: '' }];
                     }
                 };
 
@@ -606,7 +606,7 @@
                     
                     commentiDatabase.value[key].comments[selectedTercetIndex.value] = authorEditingComment.value;
                     saveToLocalStorage();
-                    showSaveNotification(`Commento terzina ${selectedTercetIndex.value + 1} salvato localmente!`);
+                    showSaveNotification(`Commento terzina ${selectedTercetIndex.value + 1} salvato!`);
                 };
 
                 // Salva le correzioni dei versi inserite dall'autore
@@ -621,11 +621,17 @@
                         commentiDatabase.value[key].verses = {};
                     }
 
+                    // Estrae il testo dagli oggetti reattivi
+                    const cleanedLines = editingVersesLines.value.map(lineItem => lineItem.text);
+
                     // Salva la modifica dei versi nella mappa persistente
-                    commentiDatabase.value[key].verses[selectedTercetIndex.value] = [...editingVersesLines.value];
+                    commentiDatabase.value[key].verses[selectedTercetIndex.value] = [...cleanedLines];
                     
                     // Aggiorna istantaneamente la visualizzazione a schermo
-                    currentCantoVerses.value[selectedTercetIndex.value] = [...editingVersesLines.value];
+                    currentCantoVerses.value[selectedTercetIndex.value] = [...cleanedLines];
+
+                    // Forza la reattività di Vue 3 sull'array principale
+                    currentCantoVerses.value = [...currentCantoVerses.value];
 
                     saveToLocalStorage();
                     showSaveNotification(`Versi corretti salvati per la terzina ${selectedTercetIndex.value + 1}!`);
