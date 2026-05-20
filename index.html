@@ -74,23 +74,17 @@
                         </defs>
                         <circle cx="50" cy="50" r="47" fill="url(#goldGrad)" stroke="#A07E1C" stroke-width="2"/>
                         <circle cx="50" cy="50" r="43" fill="none" stroke="#70530A" stroke-dasharray="2 2" stroke-width="1.2"/>
-                        
                         <g transform="translate(1, 0)">
                             <path d="M 32 63 C 24 57, 21 41, 26 31 C 31 21, 41 17, 51 18 C 58 19, 64 24, 63 32 C 62 36, 56 39, 58 44 C 60 48, 66 49, 64 57 C 62 62, 51 61, 45 63 C 39 65, 34 65, 32 63 Z" fill="#992222" stroke="#5F1414" stroke-width="1.5" />
                             <path d="M 33 63 C 35 70, 39 74, 47 74 C 54 73, 56 68, 55 61 Z" fill="#992222" stroke="#5F1414" stroke-width="1" />
-                            
                             <path d="M 46 27 C 43 27, 39 29, 38 33 L 38 39 C 35.5 39, 34 40, 34 42 C 34 44, 35.5 45, 37 45 L 37 47 C 32 49, 32 50, 33 53 C 35 55, 39 54, 41 54 C 42 58, 45 60, 48 60 C 48 56, 47 52, 45 49 L 46 36 Z" fill="url(#danteGrad)" stroke="#70550B" stroke-width="0.8" />
-                            
                             <path d="M 38 33 C 31.5 34.5, 29.5 37, 30.5 40 C 32.5 41.5, 35.5 40, 37 39" fill="none" stroke="#70550B" stroke-width="1.5" stroke-linecap="round" />
-                            
                             <path d="M 41 33 A 1.5 1.5 0 0 0 44 33" fill="none" stroke="#70550B" stroke-width="1" />
-                            
                             <path d="M 39 23 Q 43 20, 47 22 Q 44 26, 40 27 Z" fill="#2E6F40" stroke="#1B4726" stroke-width="0.8" />
                             <path d="M 45 21 Q 49 19, 53 22 Q 50 26, 46 25 Z" fill="#2E6F40" stroke="#1B4726" stroke-width="0.8" />
                             <path d="M 50 23 Q 54 22, 57 26 Q 53 29, 50 27 Z" fill="#2E6F40" stroke="#1B4726" stroke-width="0.8" />
                             <path d="M 57 27 Q 62 30, 59 35 Q 56 31, 57 27 Z" fill="#992222" stroke="#5F1414" stroke-width="0.5" />
                         </g>
-
                         <path id="textPath" d="M 50,94 A 44,44 0 1,1 50.1,94" fill="none"/>
                         <text font-family="'Cinzel', serif" font-size="7.2" font-weight="bold" fill="#5F4B0C">
                             <textPath href="#textPath" startOffset="50%" text-anchor="middle">
@@ -112,7 +106,6 @@
                 <button 
                     @click="apriFinestraImport" 
                     class="px-3 py-1.5 rounded bg-stone-900 border border-stone-800 text-stone-300 hover:bg-stone-800 text-xs transition duration-200 flex items-center gap-1.5"
-                    title="Carica il tuo file commenti.json"
                 >
                     📥 Carica File Commenti
                 </button>
@@ -218,7 +211,7 @@
                                         CANTO {{ cantoCorrente }}
                                     </h2>
                                     <p class="text-xs text-stone-400 uppercase tracking-widest mt-1">
-                                        {{ canticaSelezionata }} • {{ versiDelCanto.length }} Terzine caricate
+                                        {{ canticaSelezionata }} • {{ versiDelCanto.length }} Terzine
                                     </p>
                                 </div>
                                 <button 
@@ -231,45 +224,50 @@
                             </div>
 
                             <div v-if="versiDelCanto.length === 0" class="text-center py-12">
-                                <p class="text-stone-400 text-sm italic mb-4">I versi storici originali di questo Canto non sono ancora presenti in memoria.</p>
+                                <p class="text-stone-400 text-sm italic mb-4">I versi originali di questo Canto non sono ancora presenti nel database locale.</p>
                                 <div class="flex flex-col gap-3 max-w-xs mx-auto">
                                     <button 
                                         @click="scaricaCantoRealeDante" 
                                         :disabled="caricamentoIA"
                                         class="px-5 py-2.5 rounded bg-red-900 hover:bg-red-800 text-white font-bold text-xs tracking-wider transition disabled:opacity-50 shadow-md"
                                     >
-                                        <span v-if="caricamentoIA">⚡ Recupero versi storici reali...</span>
-                                        <span v-else>✨ Carica Versi Reali con IA</span>
+                                        <span v-if="caricamentoIA">⚡ Pulizia e recupero versi in corso...</span>
+                                        <span v-else>✨ Scarica Versi Puliti</span>
                                     </button>
-                                    <span class="text-xs text-stone-500 font-bold">O IN ALTERNATIVA</span>
+                                    <span class="text-xs text-stone-500 font-bold">OPPURE</span>
                                     <button 
                                         @click="aggiungiNuovaTerzinaVuota"
                                         class="px-4 py-2 rounded bg-stone-900 border border-stone-800 text-stone-300 text-xs hover:bg-stone-800 transition font-bold"
                                     >
-                                        ✍️ Crea Canto vuoto da zero
+                                        ✍️ Crea Canto vuoto
                                     </button>
                                 </div>
                             </div>
 
-                            <div v-else class="space-y-6 pb-24">
+                            <div v-else class="space-y-8 pb-24 font-serif">
                                 <div 
                                     v-for="(terzina, tIdx) in versiDelCanto" 
                                     :key="tIdx"
                                     @click="selezionaTerzina(tIdx)"
-                                    :class="terzinaSelezionata === tIdx ? 'border-' + coloriCantica.bordoColore + ' bg-stone-900/30 ring-1 ring-red-900/30' : 'border-transparent hover:bg-stone-900/10'"
-                                    class="p-4 rounded-xl border-l-2 cursor-pointer transition-all duration-200 relative group"
+                                    :class="terzinaSelezionata === tIdx ? 'border-' + coloriCantica.bordoColore + ' bg-stone-900/30 ring-1 ring-red-900/20' : 'border-transparent hover:bg-stone-900/10'"
+                                    class="p-4 rounded-xl border-l-2 cursor-pointer transition-all duration-200 relative"
                                 >
-                                    <span class="absolute top-2 right-3 text-[10px] font-mono text-stone-600">
+                                    <span class="absolute top-2 right-3 text-[10px] font-mono text-stone-600 uppercase tracking-wider">
                                         Terzina {{ tIdx + 1 }}
                                     </span>
 
-                                    <div class="space-y-1 text-base md:text-lg leading-relaxed text-stone-200">
-                                        <p v-for="(riga, rIdx) in terzina" :key="rIdx" class="hover:text-white transition-colors">
-                                            {{ cleanText(riga) }}
-                                        </p>
+                                    <div class="space-y-2 text-base md:text-lg leading-relaxed text-stone-200 pl-2">
+                                        <div v-for="(riga, rIdx) in terzina" :key="rIdx" class="flex justify-between items-baseline gap-4 group/line">
+                                            <p class="hover:text-white transition-colors">
+                                                {{ cleanText(riga) }}
+                                            </p>
+                                            <span class="text-xs font-mono text-stone-600 select-none w-8 text-right pr-1">
+                                                {{ ((tIdx * 3) + rIdx + 1) % 3 === 0 ? ((tIdx * 3) + rIdx + 1) : '' }}
+                                            </span>
+                                        </div>
                                     </div>
 
-                                    <div class="mt-2 flex items-center justify-between text-xs">
+                                    <div class="mt-3 pt-2 border-t border-stone-900/30 flex items-center justify-between text-xs">
                                         <span v-if="haCommento(tIdx)" class="text-emerald-500 flex items-center gap-1 font-semibold">
                                             💬 Commento salvato
                                         </span>
@@ -279,9 +277,9 @@
                                         <button 
                                             v-if="autorizzato" 
                                             @click.stop="eliminaTerzina(tIdx)"
-                                            class="text-[10px] text-stone-600 hover:text-red-500 opacity-0 group-hover:opacity-100 transition"
+                                            class="text-[10px] text-stone-500 hover:text-red-400 transition"
                                         >
-                                            ✕ Elimina
+                                            ✕ Elimina Terzina
                                         </button>
                                     </div>
                                 </div>
@@ -295,7 +293,7 @@
                                 <span class="text-3xl mb-3">📖</span>
                                 <h3 class="text-sm font-bold tracking-widest text-[#D4AF37] uppercase">Seleziona una Terzina</h3>
                                 <p class="text-xs text-stone-400 mt-2 max-w-xs">
-                                    Clicca su una qualsiasi delle terzine a sinistra per leggerne il commento, modificarlo, o correggerne i versi d'autore.
+                                    Clicca su una qualsiasi delle terzine a sinistra per leggerne il commento o modificarlo.
                                 </p>
                             </div>
 
@@ -309,7 +307,7 @@
                                     </button>
                                 </div>
 
-                                <div class="p-3 bg-stone-950/60 rounded border border-stone-900 text-xs italic text-stone-300 space-y-1">
+                                <div class="p-3 bg-stone-950/60 rounded border border-stone-900 text-xs italic text-stone-300 space-y-2">
                                     <p v-for="riga in versiDelCanto[terzinaSelezionata]" :key="riga">
                                         {{ cleanText(riga) }}
                                     </p>
@@ -458,7 +456,11 @@
                 },
                 cleanText(str) {
                     if (!str) return '';
-                    return str.replace(/<\/?[^>]+(>|$)/g, "").trim();
+                    // Rimuove tag HTML, frammenti di codice CSS o strani stili residui da Wikisource
+                    let text = str.replace(/<\/?[^>]+(>|$)/g, "");
+                    text = text.replace(/\.mw-parser-output[^{]*\{[^}]*\}/g, "");
+                    text = text.replace(/^[0-9]+\s*/g, ""); // Rimuove eventuali numeri vecchi a inizio riga
+                    return text.trim();
                 },
                 selezionaCantica(cantica) {
                     this.canticaSelezionata = cantica;
@@ -488,6 +490,7 @@
                     const canticaCodice = this.canticaSelezionata.toLowerCase();
                     let successo = false;
 
+                    // Primo tentativo: API principale
                     try {
                         const response = await fetch(`https://cdn.jsdelivr.net/gh/Anatoly03/DivinaCommedia-API@master/database/${canticaCodice}/${this.cantoCorrente}.json`);
                         if (response.ok) {
@@ -496,9 +499,10 @@
                             successo = true;
                         }
                     } catch (e) {
-                        console.warn("Fonte principale non raggiungibile, provo la riserva...");
+                        console.warn("Fonte principale non disponibile, provo la riserva...");
                     }
 
+                    // Secondo tentativo: Wikisource con algoritmo di filtraggio avanzato
                     if (!successo) {
                         try {
                             const titoloWikisource = `Divina_Commedia/${this.canticaSelezionata}/Canto_${this.numeriRomani(this.cantoCorrente)}`;
@@ -509,12 +513,12 @@
                                 successo = true;
                             }
                         } catch (e) {
-                            console.error("Anche la fonte di riserva ha risposto con errore:", e);
+                            console.error("Errore nel recupero della riserva:", e);
                         }
                     }
 
                     if (!successo) {
-                        alert("Impossibile connettersi ai server dei canti storici. Riprova tra poco.");
+                        alert("Impossibile connettersi ai server dei canti storici. Riprova più tardi.");
                     }
                     this.caricamentoIA = false;
                 },
@@ -523,10 +527,13 @@
                     let terzinaTemporanea = [];
                     
                     versesArray.forEach((v) => {
-                        terzinaTemporanea.push(v.text);
-                        if (terzinaTemporanea.length === 3) {
-                            terzineGenerate.push(terzinaTemporanea);
-                            terzinaTemporanea = [];
+                        let tPulita = this.cleanText(v.text);
+                        if (tPulita.length > 0) {
+                            terzinaTemporanea.push(tPulita);
+                            if (terzinaTemporanea.length === 3) {
+                                terzineGenerate.push(terzinaTemporanea);
+                                terzinaTemporanea = [];
+                            }
                         }
                     });
                     if (terzinaTemporanea.length > 0) {
@@ -540,18 +547,36 @@
                 elaboraVersiDaWikisource(htmlText) {
                     const parser = new DOMParser();
                     const doc = parser.parseFromString(htmlText, 'text/html');
-                    const righeVersi = doc.querySelectorAll('p, span.lg-li');
+                    
+                    // Estrariamo selettivamente solo le righe dei versi interni al testo poetico
+                    const righeVersi = doc.querySelectorAll('p, span.lg-li, div.poem p');
                     
                     let versiEstratti = [];
                     righeVersi.forEach(el => {
-                        const testo = el.textContent.trim();
-                        if (testo.length > 5 && !/^\d+$/.test(testo)) {
-                            versiEstratti.push(testo);
+                        let testo = el.textContent.trim();
+                        
+                        // Elimina righe di intestazione, licenze o stili css
+                        if (testo.includes('Divina Commedia') || testo.includes('cc-by-sa') || testo.includes('wikisource') || testo.includes('.mw-parser-output')) {
+                            return; 
                         }
+                        if (testo.startsWith('Canto terzo') || testo.startsWith('Canto ') || testo.includes('incipit')) {
+                            return;
+                        }
+
+                        // Spezza in caso di righe concatenate erroneamente nel testo
+                        const sottoRighe = testo.split('\n');
+                        sottoRighe.forEach(r => {
+                            let rigaPulita = r.replace(/^[0-9]+\s*/g, "").trim(); // toglie i numeri incorporati
+                            rigaPulita = rigaPulita.replace(/\.mw-parser-output.*/g, ""); // taglia via css incollato
+                            if (rigaPulita.length > 4 && !rigaPulita.includes('{')) {
+                                versiEstratti.push(rigaPulita);
+                            }
+                        });
                     });
 
                     let terzineGenerate = [];
                     let terzinaTemporanea = [];
+                    
                     versiEstratti.forEach(v => {
                         terzinaTemporanea.push(v);
                         if (terzinaTemporanea.length === 3) {
