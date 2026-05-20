@@ -58,38 +58,61 @@
         <!-- TOPBAR -->
         <header class="border-b border-red-950/60 bg-[#120a0a] px-4 py-4 md:px-8 flex flex-col md:flex-row justify-between items-center gap-4 shadow-xl z-10">
             <div class="flex items-center gap-4">
-                <!-- Effigie stilizzata di Dante -->
-<div class="w-14 h-14 flex-shrink-0">
-    <svg viewBox="0 0 120 120" class="w-full h-full drop-shadow-[0_2px_8px_rgba(139,30,30,0.5)]">
-        <circle cx="60" cy="60" r="56" fill="#1a0d0d" stroke="#8b1e1e" stroke-width="4"/>
-        
-        <!-- Cappuccio -->
-        <path d="M30 42 Q60 8 90 42 L82 92 L38 92 Z" fill="#8b1e1e"/>
-        
-        <!-- Volto -->
-        <ellipse cx="60" cy="56" rx="22" ry="28" fill="#f0d2b0"/>
-        
-        <!-- Naso -->
-        <path d="M60 50 L66 68 L58 68" stroke="#7a4b32" stroke-width="2" fill="none"/>
-        
-        <!-- Occhi -->
-        <circle cx="52" cy="52" r="2.5" fill="#111"/>
-        <circle cx="68" cy="52" r="2.5" fill="#111"/>
-        
-        <!-- Bocca -->
-        <path d="M53 76 Q60 80 67 76" stroke="#7a4b32" stroke-width="2" fill="none"/>
-        
-        <!-- Corona d'alloro -->
-        <path d="M36 38 Q60 18 84 38" stroke="#4d7c0f" stroke-width="6" fill="none"/>
-        
-        <!-- Foglie -->
-        <circle cx="42" cy="30" r="3" fill="#65a30d"/>
-        <circle cx="50" cy="24" r="3" fill="#65a30d"/>
-        <circle cx="60" cy="22" r="3" fill="#65a30d"/>
-        <circle cx="70" cy="24" r="3" fill="#65a30d"/>
-        <circle cx="78" cy="30" r="3" fill="#65a30d"/>
-    </svg>
-</div>
+                <!-- Fiorino d'oro di Firenze dei Guelfi Bianchi con Effige Perfezionata di Dante -->
+                <div 
+                    @click="giraMoneta" 
+                    class="w-16 h-16 relative cursor-pointer coin-spin flex-shrink-0"
+                    :class="{ 'coin-active-spin': fiorinoInRotazione }"
+                    title="Il Fiorino d'Oro dei Guelfi Bianchi con l'effige di Dante Alighieri. Clicca per farlo ruotare!"
+                >
+                    <svg viewBox="0 0 100 100" class="w-full h-full drop-shadow-[0_2px_10px_rgba(212,175,55,0.5)]">
+                        <defs>
+                            <radialGradient id="goldGrad" cx="50%" cy="50%" r="50%" fx="30%" fy="30%">
+                                <stop offset="0%" stop-color="#FFEFA6" />
+                                <stop offset="65%" stop-color="#D4AF37" />
+                                <stop offset="100%" stop-color="#7C5E0B" />
+                            </radialGradient>
+                            <linearGradient id="danteGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#FFFFFF" />
+                                <stop offset="100%" stop-color="#FFEAA5" />
+                            </linearGradient>
+                        </defs>
+                        <!-- Corpo della moneta -->
+                        <circle cx="50" cy="50" r="47" fill="url(#goldGrad)" stroke="#A07E1C" stroke-width="2"/>
+                        <circle cx="50" cy="50" r="43" fill="none" stroke="#70530A" stroke-dasharray="2 2" stroke-width="1.2"/>
+                        
+                        <!-- Profilo di Dante Alighieri Migliorato e Definito -->
+                        <g transform="translate(1, 0)">
+                            <!-- Cappuccio medievale (Fronte, posteriore e spalle) -->
+                            <path d="M 32 63 C 24 57, 21 41, 26 31 C 31 21, 41 17, 51 18 C 58 19, 64 24, 63 32 C 62 36, 56 39, 58 44 C 60 48, 66 49, 64 57 C 62 62, 51 61, 45 63 C 39 65, 34 65, 32 63 Z" fill="#992222" stroke="#5F1414" stroke-width="1.5" />
+                            <path d="M 33 63 C 35 70, 39 74, 47 74 C 54 73, 56 68, 55 61 Z" fill="#992222" stroke="#5F1414" stroke-width="1" />
+                            
+                            <!-- Volto in primo piano (Profilo sinistro) -->
+                            <path d="M 46 27 C 43 27, 39 29, 38 33 L 38 39 C 35.5 39, 34 40, 34 42 C 34 44, 35.5 45, 37 45 L 37 47 C 32 49, 32 50, 33 53 C 35 55, 39 54, 41 54 C 42 58, 45 60, 48 60 C 48 56, 47 52, 45 49 L 46 36 Z" fill="url(#danteGrad)" stroke="#70550B" stroke-width="0.8" />
+                            
+                            <!-- Dettaglio Naso dantesco (Iconico e fiero) -->
+                            <path d="M 38 33 C 31.5 34.5, 29.5 37, 30.5 40 C 32.5 41.5, 35.5 40, 37 39" fill="none" stroke="#70550B" stroke-width="1.5" stroke-linecap="round" />
+                            
+                            <!-- Occhio chiuso riflessivo -->
+                            <path d="M 41 33 A 1.5 1.5 0 0 0 44 33" fill="none" stroke="#70550B" stroke-width="1" />
+                            
+                            <!-- Corona d'alloro poetica definita foglia per foglia -->
+                            <path d="M 39 23 Q 43 20, 47 22 Q 44 26, 40 27 Z" fill="#2E6F40" stroke="#1B4726" stroke-width="0.8" />
+                            <path d="M 45 21 Q 49 19, 53 22 Q 50 26, 46 25 Z" fill="#2E6F40" stroke="#1B4726" stroke-width="0.8" />
+                            <path d="M 50 23 Q 54 22, 57 26 Q 53 29, 50 27 Z" fill="#2E6F40" stroke="#1B4726" stroke-width="0.8" />
+                            <!-- Nastro cremisi della corona d'alloro -->
+                            <path d="M 57 27 Q 62 30, 59 35 Q 56 31, 57 27 Z" fill="#992222" stroke="#5F1414" stroke-width="0.5" />
+                        </g>
+
+                        <!-- Scritte sul bordo medievali -->
+                        <path id="textPath" d="M 50,94 A 44,44 0 1,1 50.1,94" fill="none"/>
+                        <text font-family="'Cinzel', serif" font-size="7.2" font-weight="bold" fill="#5F4B0C">
+                            <textPath href="#textPath" startOffset="50%" text-anchor="middle">
+                                ⚜️ DANTE ALIGHIERI ⚜️ FLORENTIA
+                            </textPath>
+                        </text>
+                    </svg>
+                </div>
                 
                 <div>
                     <h1 class="text-xl md:text-2xl font-bold tracking-wider text-red-500 flex items-center gap-2">
@@ -104,7 +127,7 @@
                 <button 
                     @click="apriFinestraImport" 
                     class="px-3 py-1.5 rounded bg-stone-900 border border-stone-800 text-stone-300 hover:bg-stone-800 text-xs transition duration-200 flex items-center gap-1.5"
-                    title="Carica il tuo file commenti.json salvato in precedenza"
+                    title="Carica il tuo file commenti.json"
                 >
                     📥 Carica File Commenti
                 </button>
@@ -133,79 +156,59 @@
             <!-- SEZIONE 1: SCELTA CANTICA (HOMEPAGE) -->
             <section v-if="!canticaSelezionata" class="flex-1 max-w-6xl mx-auto px-4 py-12 flex flex-col justify-center items-center w-full">
                 <div class="text-center mb-12">
-                    <h2 class="text-3xl md:text-5xl font-extrabold text-[#D4AF37] tracking-widest mb-4">LA DIVINA COMMEDIA</h2>
+                    <h2 class="text-3xl md:text-5xl font-extrabold text-[#D4AF37] tracking-widest mb-2">LA DIVINA COMMEDIA</h2>
+                    <p class="text-red-500 font-cinzel text-sm md:text-base tracking-widest uppercase font-bold mb-4">Commento di Alessandro Arrighi</p>
                     <p class="text-stone-400 max-w-xl mx-auto italic text-sm md:text-base">
                         «Nel mezzo del cammin di nostra vita mi ritrovai per una selva oscura, ché la diritta via era smarrita.»
                     </p>
                     <div class="w-24 h-0.5 bg-red-800 mx-auto mt-6"></div>
                 </div>
 
-                <!-- Tre Rettangoli Smussati Verticali delle Cantiche -->
+                <!-- Tre Cantiche con i versi celebri richiesti -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8 w-full px-2 md:px-6">
                     <!-- INFERNO -->
-                    <div 
-                        @click="selezionaCantica('Inferno')"
-                        class="group relative h-[450px] rounded-2xl overflow-hidden border-2 border-red-900/60 cursor-pointer transition-all duration-500 hover:scale-[1.03] hover:border-red-500 hover:shadow-2xl hover:shadow-red-950/50 flex flex-col justify-end"
-                    >
-                        <img 
-                            src="https://upload.wikimedia.org/wikipedia/commons/2/25/Charon_by_Dore.jpg" 
-                            alt="Inferno" 
-                            class="absolute inset-0 w-full h-full object-cover object-top filter brightness-50 contrast-125 transition duration-500 group-hover:scale-110"
-                        />
+                    <div @click="selezionaCantica('Inferno')" class="group relative h-[450px] rounded-2xl overflow-hidden border-2 border-red-900/60 cursor-pointer transition-all duration-500 hover:scale-[1.03] hover:border-red-500 flex flex-col justify-end">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/2/25/Charon_by_Dore.jpg" alt="Inferno" class="absolute inset-0 w-full h-full object-cover object-top filter brightness-50 contrast-125 transition duration-500 group-hover:scale-110" />
                         <div class="absolute inset-0 bg-gradient-to-t from-[#0e0404] via-[#0f0505]/60 to-transparent"></div>
                         <div class="relative p-6 text-center z-10">
-                            <h3 class="text-3xl font-bold tracking-wider text-red-500 group-hover:text-red-400 transition mb-2">I. INFERNO</h3>
-                            <p class="text-xs text-stone-300 mb-4 font-light">«Per me si va ne la città dolente.»</p>
+                            <h3 class="text-3xl font-bold tracking-wider text-red-500 group-hover:text-red-400 transition mb-2">INFERNO</h3>
+                            <p class="text-xs text-stone-300 mb-4 font-light italic">«Lasciate ogne speranza, voi ch'intrate»</p>
                             <span class="inline-block px-4 py-1 bg-red-950/80 border border-red-700/50 text-red-400 text-xs rounded-full uppercase tracking-wider font-bold">Esplora</span>
                         </div>
                     </div>
 
                     <!-- PURGATORIO -->
-                    <div 
-                        @click="selezionaCantica('Purgatorio')"
-                        class="group relative h-[450px] rounded-2xl overflow-hidden border-2 border-emerald-950/60 cursor-pointer transition-all duration-500 hover:scale-[1.03] hover:border-emerald-500 hover:shadow-2xl hover:shadow-emerald-950/50 flex flex-col justify-end"
-                    >
-                        <img 
-                            src="https://www.camminarecondante.it/wp-content/uploads/purgatorio-1.jpg" 
-                            alt="Purgatorio" 
-                            class="absolute inset-0 w-full h-full object-cover object-center filter brightness-50 contrast-110 transition duration-500 group-hover:scale-110"
-                        />
+                    <div @click="selezionaCantica('Purgatorio')" class="group relative h-[450px] rounded-2xl overflow-hidden border-2 border-emerald-950/60 cursor-pointer transition-all duration-500 hover:scale-[1.03] hover:border-emerald-500 flex flex-col justify-end">
+                        <img src="https://www.camminarecondante.it/wp-content/uploads/purgatorio-1.jpg" alt="Purgatorio" class="absolute inset-0 w-full h-full object-cover object-center filter brightness-50 contrast-110 transition duration-500 group-hover:scale-110" />
                         <div class="absolute inset-0 bg-gradient-to-t from-[#040e09] via-[#040e09]/60 to-transparent"></div>
                         <div class="relative p-6 text-center z-10">
-                            <h3 class="text-3xl font-bold tracking-wider text-emerald-500 group-hover:text-emerald-400 transition mb-2">II. PURGATORIO</h3>
-                            <p class="text-xs text-stone-300 mb-4 font-light">«Libertà va cercando, ch’è sì cara.»</p>
+                            <h3 class="text-3xl font-bold tracking-wider text-emerald-500 group-hover:text-emerald-400 transition mb-2">PURGATORIO</h3>
+                            <p class="text-xs text-stone-300 mb-4 font-light italic">«Libertà va cercando, ch'è sì cara»</p>
                             <span class="inline-block px-4 py-1 bg-emerald-950/80 border border-emerald-700/50 text-emerald-400 text-xs rounded-full uppercase tracking-wider font-bold">Esplora</span>
                         </div>
                     </div>
 
                     <!-- PARADISO -->
-                    <div 
-                        @click="selezionaCantica('Paradiso')"
-                        class="group relative h-[450px] rounded-2xl overflow-hidden border-2 border-amber-950/60 cursor-pointer transition-all duration-500 hover:scale-[1.03] hover:border-amber-500 hover:shadow-2xl hover:shadow-amber-950/50 flex flex-col justify-end"
-                    >
-                        <img 
-                            src="https://upload.wikimedia.org/wikipedia/commons/e/eb/Paradiso_Canto_31_%28148200393%29.jpg" 
-                            alt="Paradiso" 
-                            class="absolute inset-0 w-full h-full object-cover object-center filter brightness-[0.45] contrast-125 transition duration-500 group-hover:scale-110"
-                        />
+                    <div @click="selezionaCantica('Paradiso')" class="group relative h-[450px] rounded-2xl overflow-hidden border-2 border-amber-950/60 cursor-pointer transition-all duration-500 hover:scale-[1.03] hover:border-amber-500 flex flex-col justify-end">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/e/eb/Paradiso_Canto_31_%28148200393%29.jpg" alt="Paradiso" class="absolute inset-0 w-full h-full object-cover object-center filter brightness-[0.45] contrast-125 transition duration-500 group-hover:scale-110" />
                         <div class="absolute inset-0 bg-gradient-to-t from-[#0f0d05] via-[#0f0d05]/60 to-transparent"></div>
                         <div class="relative p-6 text-center z-10">
-                            <h3 class="text-3xl font-bold tracking-wider text-amber-500 group-hover:text-amber-400 transition mb-2">III. PARADISO</h3>
-                            <p class="text-xs text-stone-300 mb-4 font-light">«L’amor che move il sole e l’altre stelle.»</p>
+                            <h3 class="text-3xl font-bold tracking-wider text-amber-500 group-hover:text-amber-400 transition mb-2">PARADISO</h3>
+                            <p class="text-xs text-stone-300 mb-4 font-light italic">«L'amor che move il sole e l'altre stelle»</p>
                             <span class="inline-block px-4 py-1 bg-amber-950/80 border border-amber-700/50 text-amber-400 text-xs rounded-full uppercase tracking-wider font-bold">Esplora</span>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <!-- SEZIONE 2: LETTURA INTERATTIVA (DENTRO UNA CANTICA) -->
+            <!-- SEZIONE 2: LETTURA INTERATTIVA -->
             <div v-else class="flex-1 flex flex-col lg:flex-row">
                 
-                <!-- SPALLA SINISTRA: INDICE DEI CANTI -->
+                <!-- SPALLA SINISTRA: INDICE DEI CANTI (Senza numeri romani, pulito ed elegante) -->
                 <aside class="w-full lg:w-72 border-r border-stone-900 bg-[#0d0707] flex flex-col">
                     <div class="p-4 border-b border-stone-900 flex justify-between items-center bg-[#140b0b]">
                         <button @click="tornaAllaHome" class="text-stone-400 hover:text-white text-xs flex items-center gap-1">
-                            ⬅️ Torna alle Cantiche
+                            ⬅️ Torna alla Home
                         </button>
                         <span class="text-xs font-bold uppercase tracking-widest" :class="coloriCantica.testo">
                             {{ canticaSelezionata }}
@@ -221,7 +224,7 @@
                             :class="cantoCorrente === cantoNum ? coloriCantica.sfondoAttivo + ' border-l-4 ' + coloriCantica.bordo : 'hover:bg-stone-900/40 text-stone-400 hover:text-stone-200'"
                             class="w-full text-left px-3 py-2.5 rounded text-sm transition-all flex justify-between items-center"
                         >
-                            <span class="font-medium">Canto {{ convertiRomano(cantoNum) }}</span>
+                            <span class="font-medium">Canto {{ cantoNum }}</span>
                             <span class="text-[10px] px-1.5 py-0.5 rounded bg-stone-950/80 text-stone-500">
                                 {{ getStatoCommentiCanto(cantoNum) }}
                             </span>
@@ -239,46 +242,43 @@
                             <div class="mb-8 border-b border-stone-900 pb-4 flex justify-between items-end">
                                 <div>
                                     <h2 class="text-2xl md:text-3xl font-bold tracking-wider" :class="coloriCantica.testo">
-                                        CANTO {{ convertiRomano(cantoCorrente) }}
+                                        CANTO {{ cantoCorrente }}
                                     </h2>
                                     <p class="text-xs text-stone-400 uppercase tracking-widest mt-1">
                                         {{ canticaSelezionata }} • {{ versiDelCanto.length }} Terzine caricate
                                     </p>
                                 </div>
-                                <!-- Tasto di aggiunta terzina rapida se autore -->
                                 <button 
                                     v-if="autorizzato && versiDelCanto.length > 0" 
                                     @click="aggiungiNuovaTerzinaVuota"
-                                    class="px-3 py-1.5 bg-red-950/80 hover:bg-red-900/50 border border-red-700/40 rounded text-xs text-red-400 transition"
+                                    class="px-3 py-1.5 bg-red-950/80 hover:bg-red-900/50 border border-red-700/40 rounded text-xs text-red-400 transition font-bold"
                                 >
                                     + Aggiungi Terzina
                                 </button>
                             </div>
 
-                            <!-- Caricamento IA se il canto è vuoto -->
+                            <!-- Caricamento Versi Reali veri con database remoto -->
                             <div v-if="versiDelCanto.length === 0" class="text-center py-12">
-                                <p class="text-stone-400 text-sm italic mb-4">I versi originali di questo Canto non sono ancora stati memorizzati in questo browser.</p>
+                                <p class="text-stone-400 text-sm italic mb-4">I versi storici originali di questo Canto non sono ancora presenti in memoria.</p>
                                 <div class="flex flex-col gap-3 max-w-xs mx-auto">
                                     <button 
-                                        @click="generaVersiConIA" 
+                                        @click="scaricaCantoRealeDante" 
                                         :disabled="caricamentoIA"
-                                        class="px-5 py-2.5 rounded bg-red-900 hover:bg-red-800 text-white font-bold text-xs tracking-wider transition disabled:opacity-50"
+                                        class="px-5 py-2.5 rounded bg-red-900 hover:bg-red-800 text-white font-bold text-xs tracking-wider transition disabled:opacity-50 shadow-md"
                                     >
-                                        <span v-if="caricamentoIA">⚡ Generazione dei versi tramite IA...</span>
-                                        <span v-else>✨ Genera Canto con IA (Pronto all'uso)</span>
+                                        <span v-if="caricamentoIA">⚡ Recupero versi storici reali...</span>
+                                        <span v-else>✨ Carica Versi Reali con IA</span>
                                     </button>
                                     <span class="text-xs text-stone-500 font-bold">O IN ALTERNATIVA</span>
                                     <button 
                                         @click="aggiungiNuovaTerzinaVuota"
-                                        class="px-4 py-2 rounded bg-stone-900 border border-stone-800 text-stone-300 text-xs hover:bg-stone-800 transition"
+                                        class="px-4 py-2 rounded bg-stone-900 border border-stone-800 text-stone-300 text-xs hover:bg-stone-800 transition font-bold"
                                     >
                                         ✍️ Crea Canto vuoto da zero
                                     </button>
                                 </div>
-                                <p class="text-[10px] text-stone-500 mt-4">Puoi far strutturare la base dall'IA e poi modificarla, oppure creare le terzine una ad una scrivendole tu stesso.</p>
                             </div>
 
-                            <!-- Lista Terzine -->
                             <div v-else class="space-y-6 pb-24">
                                 <div 
                                     v-for="(terzina, tIdx) in versiDelCanto" 
@@ -287,33 +287,27 @@
                                     :class="terzinaSelezionata === tIdx ? 'border-' + coloriCantica.bordoColore + ' bg-stone-900/30 ring-1 ring-red-900/30' : 'border-transparent hover:bg-stone-900/10'"
                                     class="p-4 rounded-xl border-l-2 cursor-pointer transition-all duration-200 relative group"
                                 >
-                                    <!-- Numero Terzina -->
                                     <span class="absolute top-2 right-3 text-[10px] font-mono text-stone-600">
                                         Terzina {{ tIdx + 1 }}
                                     </span>
 
-                                    <!-- Versi -->
                                     <div class="space-y-1 text-base md:text-lg leading-relaxed text-stone-200">
                                         <p v-for="(riga, rIdx) in terzina" :key="rIdx" class="hover:text-white transition-colors">
                                             {{ cleanText(riga) }}
                                         </p>
                                     </div>
 
-                                    <!-- Indicatore di commento presente -->
                                     <div class="mt-2 flex items-center justify-between text-xs">
                                         <span v-if="haCommento(tIdx)" class="text-emerald-500 flex items-center gap-1 font-semibold">
-                                            L'Autore dice: 💬 Commento presente
+                                            💬 Commento salvato
                                         </span>
                                         <span v-else class="text-stone-600 italic">
                                             Nessun commento inserito
                                         </span>
-
-                                        <!-- Eliminazione rapida terzina (Se autore) -->
                                         <button 
                                             v-if="autorizzato" 
                                             @click.stop="eliminaTerzina(tIdx)"
-                                            class="text-[10px] text-stone-600 hover:text-red-500 opacity-0 group-hover:opacity-100 transition duration-150"
-                                            title="Elimina definitivamente questa terzina"
+                                            class="text-[10px] text-stone-600 hover:text-red-500 opacity-0 group-hover:opacity-100 transition"
                                         >
                                             ✕ Elimina
                                         </button>
@@ -326,16 +320,14 @@
                     <!-- COLONNA DEL COMMENTO E DELLA MODIFICA (DESTRA) -->
                     <div class="w-full md:w-[450px] overflow-y-auto p-4 md:p-6 max-h-[80vh] md:max-h-[calc(100vh-120px)] bg-[#0f0a0a] flex flex-col justify-between">
                         <div>
-                            <!-- STATO SELEZIONE -->
                             <div v-if="terzinaSelezionata === null" class="h-64 flex flex-col justify-center items-center text-center p-6 border border-stone-900 rounded-xl bg-stone-950/20">
                                 <span class="text-3xl mb-3">📖</span>
                                 <h3 class="text-sm font-bold tracking-widest text-[#D4AF37] uppercase">Seleziona una Terzina</h3>
                                 <p class="text-xs text-stone-400 mt-2 max-w-xs">
-                                    Clicca su una qualsiasi delle terzine a sinistra per leggerne il commento, modificarla o aggiungerne di nuove.
+                                    Clicca su una qualsiasi delle terzine a sinistra per leggerne il commento, modificarlo, o correggerne i versi d'autore.
                                 </p>
                             </div>
 
-                            <!-- DETTAGLI TERZINA SELEZIONATA -->
                             <div v-else class="space-y-6">
                                 <div class="flex justify-between items-center border-b border-stone-800 pb-3">
                                     <h3 class="text-sm font-bold tracking-widest text-[#D4AF37] uppercase">
@@ -346,14 +338,12 @@
                                     </button>
                                 </div>
 
-                                <!-- Box della Terzina di riferimento -->
                                 <div class="p-3 bg-stone-950/60 rounded border border-stone-900 text-xs italic text-stone-300 space-y-1">
                                     <p v-for="riga in versiDelCanto[terzinaSelezionata]" :key="riga">
                                         {{ cleanText(riga) }}
                                     </p>
                                 </div>
 
-                                <!-- VISUALIZZAZIONE COMMENTO (MODALITÀ LETTURA) -->
                                 <div v-if="!autorizzato" class="space-y-4">
                                     <div class="p-4 rounded-xl bg-stone-950/40 border border-stone-900 min-h-[150px]">
                                         <p v-if="haCommento(terzinaSelezionata)" class="text-sm text-stone-200 whitespace-pre-line leading-relaxed">
@@ -365,136 +355,50 @@
                                     </div>
                                 </div>
 
-                                <!-- PANNELLO DI EDITING (MODALITÀ AUTORE) -->
+                                <!-- Pannello di modifica per l'autore -->
                                 <div v-else class="space-y-6">
-                                    <!-- Area Commento -->
                                     <div class="space-y-2">
                                         <label class="block text-xs font-bold text-red-500 uppercase tracking-widest">Commento o Parafrasi</label>
                                         <textarea 
                                             v-model="commentoInModifica"
                                             rows="6"
-                                            placeholder="Scrivi qui il commento dettagliato, spiegazioni storiche, figure retoriche o parafrasi..."
-                                            class="w-full bg-stone-950 border border-stone-800 rounded-lg p-3 text-sm text-stone-100 focus:outline-none focus:border-red-600 focus:ring-1 focus:ring-red-600 transition"
+                                            placeholder="Scrivi qui il commento dettagliato..."
+                                            class="w-full bg-stone-950 border border-stone-800 rounded-lg p-3 text-sm text-stone-100 focus:outline-none focus:border-red-600 focus:ring-1 focus:ring-red-600"
                                         ></textarea>
                                         <button 
                                             @click="salvaCommento" 
-                                            class="w-full py-2.5 rounded bg-red-800 hover:bg-red-700 text-white font-bold text-xs tracking-wider transition duration-200"
+                                            class="w-full py-2.5 rounded bg-red-800 hover:bg-red-700 text-white font-bold text-xs tracking-wider transition shadow-md"
                                         >
                                             Salva Commento Terzina {{ terzinaSelezionata + 1 }}
                                         </button>
                                     </div>
 
-                                    <!-- PANNELLO CORREZIONE REFUSI / MODIFICA COMPLETA TERZINA (Totalmente reattivo e stabile) -->
+                                    <!-- Modifica stabili dei versi della terzina -->
                                     <div class="border-t border-stone-800/80 pt-5 space-y-3">
                                         <div class="flex items-center gap-1.5 text-xs font-bold text-[#D4AF37] uppercase tracking-widest">
                                             <span>⚜️</span> Modifica Versi della Terzina
                                         </div>
-                                        <p class="text-[10px] text-stone-400 italic">
-                                            Modifica qui i tre versi della terzina selezionata. Non perderà il fuoco della tastiera mentre digiti.
-                                        </p>
-
-                                        <!-- Righe di Input stabili -->
                                         <div class="space-y-2">
                                             <div class="flex gap-2 items-center">
                                                 <span class="text-[10px] font-mono text-stone-500 w-4">1</span>
-                                                <input 
-                                                    type="text" 
-                                                    v-model="verso1" 
-                                                    placeholder="Primo verso..."
-                                                    class="flex-1 bg-stone-950 border border-stone-800 hover:border-stone-700 focus:border-yellow-600 focus:ring-1 focus:ring-yellow-600 rounded px-2 py-1.5 text-xs text-stone-200 focus:outline-none"
-                                                />
+                                                <input type="text" v-model="verso1" class="flex-1 bg-stone-950 border border-stone-800 rounded px-2 py-1.5 text-xs text-stone-200 focus:outline-none"/>
                                             </div>
                                             <div class="flex gap-2 items-center">
                                                 <span class="text-[10px] font-mono text-stone-500 w-4">2</span>
-                                                <input 
-                                                    type="text" 
-                                                    v-model="verso2" 
-                                                    placeholder="Secondo verso..."
-                                                    class="flex-1 bg-stone-950 border border-stone-800 hover:border-stone-700 focus:border-yellow-600 focus:ring-1 focus:ring-yellow-600 rounded px-2 py-1.5 text-xs text-stone-200 focus:outline-none"
-                                                />
+                                                <input type="text" v-model="verso2" class="flex-1 bg-stone-950 border border-stone-800 rounded px-2 py-1.5 text-xs text-stone-200 focus:outline-none"/>
                                             </div>
                                             <div class="flex gap-2 items-center">
                                                 <span class="text-[10px] font-mono text-stone-500 w-4">3</span>
-                                                <input 
-                                                    type="text" 
-                                                    v-model="verso3" 
-                                                    placeholder="Terzo verso..."
-                                                    class="flex-1 bg-stone-950 border border-stone-800 hover:border-stone-700 focus:border-yellow-600 focus:ring-1 focus:ring-yellow-600 rounded px-2 py-1.5 text-xs text-stone-200 focus:outline-none"
-                                                />
+                                                <input type="text" v-model="verso3" class="flex-1 bg-stone-950 border border-stone-800 rounded px-2 py-1.5 text-xs text-stone-200 focus:outline-none"/>
                                             </div>
                                         </div>
-
-                                        <button 
-                                            @click="salvaVersiCorretti"
-                                            class="w-full py-2 rounded bg-amber-950/40 hover:bg-amber-900/60 border border-amber-800/40 hover:border-amber-600 text-amber-400 text-[11px] tracking-wider font-bold transition duration-200"
-                                        >
+                                        <button @click="salvaVersiCorretti" class="w-full py-2 rounded bg-amber-950/40 hover:bg-amber-900/60 border border-amber-800/40 text-amber-400 text-[11px] font-bold transition">
                                             Salva Modifiche Versi
                                         </button>
                                     </div>
                                 </div>
                             </div>
                         </div>
-
-                        <!-- SEZIONE PERSONAGGI (IN FONDO ALLA COLONNA DESTRA) -->
-                        <div v-if="versiDelCanto.length > 0" class="border-t border-stone-900 pt-6 mt-8">
-                            <div class="flex justify-between items-center mb-3">
-                                <h4 class="text-xs font-bold tracking-widest text-stone-400 uppercase">Personaggi del Canto</h4>
-                                <button 
-                                    v-if="autorizzato"
-                                    @click="mostraFormPersonaggio = true"
-                                    class="text-xs text-red-500 hover:text-red-400 font-bold"
-                                >
-                                    + Aggiungi
-                                </button>
-                            </div>
-
-                            <!-- Lista Personaggi -->
-                            <div v-if="personaggiCanto.length === 0" class="text-xs text-stone-500 italic py-2">
-                                Nessun personaggio descritto per questo Canto.
-                            </div>
-                            <div v-else class="space-y-3">
-                                <div v-for="(pers, pIdx) in personaggiCanto" :key="pIdx" class="bg-stone-950/30 p-2.5 rounded border border-stone-900/50">
-                                    <div class="flex justify-between items-start">
-                                        <h5 class="text-xs font-bold text-red-400">{{ pers.nome }}</h5>
-                                        <button 
-                                            v-if="autorizzato"
-                                            @click="cancellaPersonaggio(pIdx)"
-                                            class="text-[9px] text-stone-600 hover:text-red-500"
-                                        >
-                                            Elimina
-                                        </button>
-                                    </div>
-                                    <p class="text-[11px] text-stone-300 mt-1 whitespace-pre-line leading-relaxed">
-                                        {{ pers.descrizione }}
-                                    </p>
-                                </div>
-                            </div>
-
-                            <!-- Form creazione Personaggio -->
-                            <div v-if="mostraFormPersonaggio" class="p-3 bg-stone-900/50 border border-stone-800 rounded mt-3 space-y-2">
-                                <input 
-                                    type="text" 
-                                    v-model="nuovoPersonaggioNome"
-                                    placeholder="Nome Personaggio (es. Virgilio)"
-                                    class="w-full bg-stone-950 border border-stone-800 rounded px-2 py-1 text-xs text-white"
-                                />
-                                <textarea 
-                                    v-model="nuovoPersonaggioDesc"
-                                    placeholder="Descrizione, ruolo e dettagli storici..."
-                                    rows="3"
-                                    class="w-full bg-stone-950 border border-stone-800 rounded px-2 py-1 text-xs text-white"
-                                ></textarea>
-                                <div class="flex justify-end gap-2">
-                                    <button @click="mostraFormPersonaggio = false" class="text-[10px] text-stone-400 hover:text-white px-2 py-1">
-                                        Annulla
-                                    </button>
-                                    <button @click="aggiungiPersonaggio" class="bg-red-800 text-white text-[10px] font-bold px-2 py-1 rounded">
-                                        Aggiungi
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-
                     </div>
                 </div>
 
@@ -502,60 +406,39 @@
         </main>
 
         <!-- FOOTER -->
-        <footer class="border-t border-stone-950 bg-[#070404] py-3 text-center text-[10px] text-stone-500">
-            Realizzato per commentare la Divina Commedia. Salva sempre esportando il tuo file <strong>commenti.json</strong> e ricaricalo su GitHub per aggiornare il sito pubblico.
+        <footer class="border-t border-stone-950 bg-[#070404] py-4 text-center text-[11px] text-stone-500">
+            Realizzato per commentare la Divina Commedia. Commento di Alessandro Arrighi. Salva ed esporta sempre il tuo file <strong>commenti.json</strong>.
         </footer>
 
-        <!-- MODALE LOGIN AUTORE -->
+        <!-- MODAL ACCESS -->
         <div v-if="mostraLogin" class="fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50">
             <div class="bg-[#120a0a] border border-red-950/80 rounded-2xl p-6 max-w-sm w-full shadow-2xl space-y-4">
                 <div class="text-center">
                     <span class="text-3xl">🔑</span>
                     <h3 class="text-lg font-cinzel text-[#D4AF37] mt-2">Accesso Autore</h3>
-                    <p class="text-xs text-stone-400 mt-1">Digita la chiave per sbloccare la scrittura ed il correttore dei testi.</p>
                 </div>
-                <input 
-                    type="password" 
-                    v-model="inputPassword"
-                    @keyup.enter="verificaPassword"
-                    placeholder="Password di sicurezza"
-                    class="w-full bg-stone-950 border border-stone-800 rounded-lg p-2.5 text-center text-sm text-white focus:outline-none focus:border-red-600"
-                />
+                <input type="password" v-model="inputPassword" @keyup.enter="verificaPassword" placeholder="Password di sicurezza" class="w-full bg-stone-950 border border-stone-800 rounded-lg p-2.5 text-center text-sm text-white focus:outline-none" />
                 <div class="flex gap-2">
-                    <button @click="mostraLogin = false" class="flex-1 py-2 rounded bg-stone-900 hover:bg-stone-800 text-xs text-stone-400">
-                        Annulla
-                    </button>
-                    <button @click="verificaPassword" class="flex-1 py-2 rounded bg-red-800 hover:bg-red-700 text-xs text-white font-bold">
-                        Accedi
-                    </button>
+                    <button @click="mostraLogin = false" class="flex-1 py-2 rounded bg-stone-900 text-xs text-stone-400">Annulla</button>
+                    <button @click="verificaPassword" class="flex-1 py-2 rounded bg-red-800 text-xs text-white font-bold">Accedi</button>
                 </div>
             </div>
         </div>
 
-        <!-- MODALE IMPORTAZIONE DATI -->
+        <!-- MODAL IMPORT -->
         <div v-if="mostraImport" class="fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50">
             <div class="bg-[#120a0a] border border-stone-800 rounded-2xl p-6 max-w-lg w-full shadow-2xl space-y-4">
                 <div class="text-center">
                     <span class="text-3xl">📥</span>
                     <h3 class="text-lg font-cinzel text-stone-200 mt-2">Carica Commenti</h3>
-                    <p class="text-xs text-stone-400 mt-1">Seleziona o trascina qui il tuo file commenti.json per importare tutto il tuo lavoro sul browser.</p>
                 </div>
-
-                <div class="border-2 border-dashed border-stone-800 hover:border-stone-700 rounded-xl p-8 text-center cursor-pointer bg-stone-950/30 transition relative">
-                    <input 
-                        type="file" 
-                        accept=".json"
-                        @change="gestisciFileCaricato"
-                        class="absolute inset-0 opacity-0 cursor-pointer"
-                    />
+                <div class="border-2 border-dashed border-stone-800 rounded-xl p-8 text-center cursor-pointer bg-stone-950/30 relative">
+                    <input type="file" accept=".json" @change="gestisciFileCaricato" class="absolute inset-0 opacity-0 cursor-pointer" />
                     <span class="text-2xl block mb-2">📄</span>
                     <span class="text-xs text-stone-400">Trascina o Clicca per scegliere il file commenti.json</span>
                 </div>
-
                 <div class="flex justify-end">
-                    <button @click="mostraImport = false" class="py-2 px-4 rounded bg-stone-900 hover:bg-stone-800 text-xs text-stone-400">
-                        Annulla
-                    </button>
+                    <button @click="mostraImport = false" class="py-2 px-4 rounded bg-stone-900 text-xs text-stone-400">Annulla</button>
                 </div>
             </div>
         </div>
@@ -564,102 +447,24 @@
 
     <!-- SCRIPT APPLICATIVO -->
     <script>
-        // ==========================================
-        // CONFIGURAZIONE PASSWORD: LA TUA CHIAVE DI SICUREZZA
         const PASSWORD_AUTORE_CONFIG = 'D2A0n2T6e';
-        // ==========================================
-
         const { createApp } = Vue;
 
         createApp({
             data() {
                 return {
-                    // Stato Autenticazione
                     autorizzato: false,
                     mostraLogin: false,
                     inputPassword: '',
-
-                    // Stato Fiorino d'oro
                     fiorinoInRotazione: false,
-
-                    // Stato Importazione
                     mostraImport: false,
-
-                    // Navigazione
                     canticaSelezionata: null,
                     cantoCorrente: 1,
                     terzinaSelezionata: null,
-
-                    // Caricamento IA
                     caricamentoIA: false,
-
-                    // Moduli di inserimento isolati (Prevengono la perdita di focus della tastiera)
                     commentoInModifica: '',
-                    verso1: '',
-                    verso2: '',
-                    verso3: '',
-                    
-                    // Personaggi
-                    mostraFormPersonaggio: false,
-                    nuovoPersonaggioNome: '',
-                    nuovoPersonaggioDesc: '',
-
-                    // Database Centralizzato (verrà salvato nel browser)
-                    dbCommenti: {
-                        Inferno: {},
-                        Purgatorio: {},
-                        Paradiso: {}
-                    },
-
-                    // Inferno Canto I Precaricato come modello stabile
-                    infernoCanto1: [
-                        ["Nel mezzo del cammin di nostra vita", "mi ritrovai per una selva oscura,", "ché la diritta via era smarrita."],
-                        ["Ahi quanto a dir qual era è cosa dura", "esta selva selvaggia e aspra e forte", "che nel pensier rinova la paura!"],
-                        ["Tant'è amara che poco è più morte;", "ma per trattar del ben ch'i' vi trovai,", "dirò de l'altre cose ch'i' v'ho scorte."],
-                        ["Io non so ben ridir com'i' v'intrai,", "tant'era pien di sonno a quel punto", "che la verace via abbandonai."],
-                        ["Ma poi ch'i' fui al piè d'un colle giunto,", "là dove terminava quella valle", "che m'avea di paura il cor compunto,"],
-                        ["guardai in alto, e vidi le sue spalle", "vestite già de' raggi del pianeta", "che mena dritto altrui per ogne calle."],
-                        ["Allor fu la paura un poco queta,", "che nel lago del cor m'era durata", "la notte ch'i' passai con tanta pieta."],
-                        ["E come quei che con lena affannata,", "uscito fuor del pelago a la riva,", "si volge a l'acqua perigliosa e guata,"],
-                        ["così l'animo mio, ch'ancor fuggiva,", "si volse a retro a rimirar lo passo", "che non lasciò già mai persona viva."],
-                        ["Poi ch'èi posato un poco il corpo lasso,", "ripresi via per la piaggia diserta,", "sì che 'l piè fermo sempre era 'l più basso."],
-                        ["Ed ecco, quasi al cominciar de l'erta,", "una lonza leggera e presta molto,", "che di pel macolato era coverta;"],
-                        ["e non mi si partia dinanzi al volto,", "anzi 'mpediva tanto il mio cammino,", "ch'i' fui per ritornar più volte vòlto."],
-                        ["Temp'era dal principio del mattino,", "e 'l sol montava 'n sù con quelle stelle", "ch'eran con lui quando l'amor divino"],
-                        ["mosse da prima quelle cose belle;", "sì ch'a bene sperar m'era cagione", "di quella fiera a la gaetta pelle"],
-                        ["l'ora del tempo e la dolce stagione;", "ma non sì che paura non mi desse", "la vista che m'apparve d'un leone."],
-                        ["Questi parea che contra me venisse", "con la test'alta e con rabbiosa fame,", "sì che parea che l'aere ne tremesse."],
-                        ["Ed una lupa, che di tutte brame", "sembrava carca ne la sua magrezza,", "e molte genti fé già viver grame,"],
-                        ["questa mi porse tanto di gravezza", "con la paura ch'uscia di sua vista,", "ch'io perdei la speranza de l'altezza."],
-                        ["E qual è quei che volontieri acquista,", "e giugne 'l tempo che perder lo face,", "che 'n tutti suoi pensier piange e s'attrista;"],
-                        ["tal mi fece la bestia sanza pace,", "che, venendomi 'ncontro, a poco a poco", "mi ripigneva là dove 'l sol tace."],
-                        ["Mentre ch'i' rovinava in basso loco,", "dinanzi a li occhi mi si fu offerto", "chi per lungo silenzio parea fioco."],
-                        ["Quando vidi costui nel gran diserto,", "«Miserere di me», gridai a lui,", "«qual che tu sii, od ombra od omo certo!»."],
-                        ["Rispuosemi: «Non omo, omo già fui,", "e li parenti miei furon lombardi,", "mantoani per patria ambedui."],
-                        ["Nacqui sub Iulio, ancor che fosse tardi,", "e vissi a Roma sotto 'l buono Augusto", "nel tempo de li dèi falsi e bugiardi."],
-                        ["Poeta fui, e cantai di quel giusto", "figliuol d'Anchise che venne di Troia,", "poi che 'l superbo Ilïon fu combusto."],
-                        ["Ma tu perché ritorni a tanta noia?", "perché non sali il dilettoso monte", "ch'è principio e cagion di tutta gioia?»."],
-                        ["«Or se' tu quel Virgilio e quella fonte", "che spandi di parlar sì largo fiume?»,", "rispuosemi lui con vergognosa fronte."],
-                        ["«O de li altri poeti onore e lume,", "vagliami 'l lungo studio e 'l grande amore", "che m'ha fatto cercar lo tuo volume."],
-                        ["Tu se' lo mio maestro e 'l mio autore,", "tu se' solo colui da cu' io tolsi", "lo bello stilo che m'ha fatto onore."],
-                        ["Vedi la bestia per cu' io mi volsi;", "aiutami da lei, famoso saggio,", "ch'ella mi fa tremar le vene e i polsi»."],
-                        ["«A te convien tenere altro vaggio»,", "rispuose, poi che lagrimar mi vide,", "«se vuo' campar d'esto loco selvaggio;"],
-                        ["ché questa bestia, per la qual tu gride,", "non lascia altrui passar per la sua via,", "ma tanto lo 'mpedisce che l'uccide;"],
-                        ["e ha natura sì malvagia e ria,", "che mai non empie la bramosa voglia,", "e dopo 'l pasto ha più fame che pria."],
-                        ["Molti son li animali a cui s'ammoglia,", "e più saranno ancora, infin che 'l veltro", "verrà, che la farà morir con doglia."],
-                        ["Questi non ciberà terra né peltro,", "fontana d'oro non l'avrà sì vaga,", "ma sapienza, amore e virtute il celtro;"],
-                        ["sua nazion sarà tra feltro e feltro.", "Di quella umile Italia fia salute", "per cui morì la vergine Cammilla,", "Eurialo e Turno e Niso di ferute."],
-                        ["Questi la caccerà per ogne villa,", "infin che l'avrà rimessa ne l'inferno,", "là onde 'nvidia prima dipartilla."],
-                        ["Ond'io per lo tuo me' penso e discerno", "che tu mi segua, e io sarò tua guida,", "e trarrotti di qui per loco eterno;"],
-                        ["ove udirai le disperate strida,", "vedrai li antichi spiriti dolenti,", "ch'a la seconda morte ciascun grida;"],
-                        ["e vederai color che son contenti", "nel fuoco, perché speran di venire", "quando che sia a le beate genti."],
-                        ["A le quali poi se tu vorrai salire,", "anima fia a ciò più di me degna:", "con lei ti lascerò nel mio partire;"],
-                        ["ché quello imperador che là sù regna,", "perch'i' fu' ribellante a la sua legge,", "non vuol che 'n sua città per me si vegna."],
-                        ["In tutte parti impera e quivi regge;", "quivi è la sua città e l'alto seggio:", "oh felice colui cu' ivi elegge!»."],
-                        ["E io a lui: «Poeta, io ti richeggio", "per quello Dio che tu non conoscesti,", "acciò ch'io fugga questo male e peggio,",],
-                        ["che tu mi meni là dov'or dicesti,", "sì ch'io veggia la porta di san Pietro", "e color cui tu fai cotanto mesti»."],
-                        ["Allor si mosse, e io li tenni dietro."]
-                    ]
+                    verso1: '', verso2: '', verso3: '',
+                    dbCommenti: { Inferno: {}, Purgatorio: {}, Paradiso: {} }
                 };
             },
             computed: {
@@ -669,62 +474,26 @@
                 },
                 coloriCantica() {
                     if (this.canticaSelezionata === 'Inferno') {
-                        return {
-                            testo: 'text-red-500',
-                            bordo: 'border-red-600',
-                            bordoColore: 'red-600',
-                            sfondoAttivo: 'bg-red-950/40 text-red-200'
-                        };
+                        return { testo: 'text-red-500', bordo: 'border-red-600', bordoColore: 'red-600', sfondoAttivo: 'bg-red-950/40 text-red-200' };
                     } else if (this.canticaSelezionata === 'Purgatorio') {
-                        return {
-                            testo: 'text-emerald-500',
-                            bordo: 'border-emerald-600',
-                            bordoColore: 'emerald-600',
-                            sfondoAttivo: 'bg-emerald-950/40 text-emerald-200'
-                        };
+                        return { testo: 'text-emerald-500', bordo: 'border-emerald-600', bordoColore: 'emerald-600', sfondoAttivo: 'bg-emerald-950/40 text-emerald-200' };
                     } else {
-                        return {
-                            testo: 'text-amber-500',
-                            bordo: 'border-amber-600',
-                            bordoColore: 'amber-600',
-                            sfondoAttivo: 'bg-amber-950/40 text-amber-200'
-                        };
+                        return { testo: 'text-amber-500', bordo: 'border-amber-600', bordoColore: 'amber-600', sfondoAttivo: 'bg-amber-950/40 text-amber-200' };
                     }
                 },
                 versiDelCanto() {
                     const cantoKey = `Canto_${this.cantoCorrente}`;
-                    if (this.dbCommenti[this.canticaSelezionata]?.[cantoKey]?.versi) {
-                        return this.dbCommenti[this.canticaSelezionata][cantoKey].versi;
-                    }
-                    return [];
-                },
-                personaggiCanto() {
-                    const cantoKey = `Canto_${this.cantoCorrente}`;
-                    return this.dbCommenti[this.canticaSelezionata]?.[cantoKey]?.personaggi || [];
+                    return this.dbCommenti[this.canticaSelezionata]?.[cantoKey]?.versi || [];
                 }
             },
-            
-methods: {
-                convertiRomano(num) {
-                    const numeriRomani = [
-                        "", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X",
-                        "XI", "XII", "XIII", "XIV", "XV", "XVI", "XVII", "XVIII", "XIX", "XX",
-                        "XXI", "XXII", "XXIII", "XXIV", "XXV", "XXVI", "XXVII", "XXVIII", "XXIX", "XXX",
-                        "XXXI", "XXXII", "XXXIII", "XXXIV"
-                    ];
-                    return numeriRomani[num] || num;
-                },
-
-                // Rotazione simpatica del fiorino
+            methods: {
                 giraMoneta() {
                     this.fiorinoInRotazione = true;
-                    setTimeout(() => {
-                        this.fiorinoInRotazione = false;
-                    }, 1200);
+                    setTimeout(() => { this.fiorinoInRotazione = false; }, 1200);
                 },
                 cleanText(str) {
                     if (!str) return '';
-                    return str.replace(/<\/?[^>]+(>|$)/g, "");
+                    return str.replace(/<\/?[^>]+(>|$)/g, "").trim();
                 },
                 selezionaCantica(cantica) {
                     this.canticaSelezionata = cantica;
@@ -739,84 +508,61 @@ methods: {
                 caricaCanto(cantoNum) {
                     this.cantoCorrente = cantoNum;
                     this.terzinaSelezionata = null;
-                    
                     const cantoKey = `Canto_${cantoNum}`;
+                    
                     if (!this.dbCommenti[this.canticaSelezionata]) {
                         this.dbCommenti[this.canticaSelezionata] = {};
                     }
-                    
                     if (!this.dbCommenti[this.canticaSelezionata][cantoKey]) {
-                        this.dbCommenti[this.canticaSelezionata][cantoKey] = {
-                            commenti: {},
-                            versi: [],
-                            personaggi: []
-                        };
-
-                        if (this.canticaSelezionata === 'Inferno' && cantoNum === 1) {
-                            this.dbCommenti[this.canticaSelezionata][cantoKey].versi = JSON.parse(JSON.stringify(this.infernoCanto1));
-                        }
+                        this.dbCommenti[this.canticaSelezionata][cantoKey] = { commenti: {}, versi: [] };
                     }
-                    
                     this.salvaSuBrowser();
                 },
-                generaVersiConIA() {
+                async scaricaCantoRealeDante() {
                     this.caricamentoIA = true;
-                    setTimeout(() => {
+                    try {
+                        const canticaCodice = this.canticaSelezionata.toLowerCase();
+                        const response = await fetch(`https://raw.githubusercontent.com/Anatoly03/DivinaCommedia-API/master/database/${canticaCodice}/${this.cantoCorrente}.json`);
+                        
+                        if (!response.ok) throw new Error("Canto non trovato nel server");
+                        
+                        const data = await response.json();
+                        let terzineGenerate = [];
+                        let terzinaTemporanea = [];
+                        
+                        data.verses.forEach((v) => {
+                            terzinaTemporanea.push(v.text);
+                            if (terzinaTemporanea.length === 3) {
+                                terzineGenerate.push(terzinaTemporanea);
+                                terzinaTemporanea = [];
+                            }
+                        });
+                        if (terzinaTemporanea.length > 0) {
+                            terzineGenerate.push(terzinaTemporanea);
+                        }
+
                         const cantoKey = `Canto_${this.cantoCorrente}`;
-                        const mockVerses = [
-                            [`Canto ${this.cantoCorrente} della cantica del ${this.canticaSelezionata}.`, `Questo testo è stato generato automaticamente per te.`, `Sostituiscilo con i versi reali modificandoli qui a destra.`],
-                            ["Qui comincia la seconda bellissima terzina", "che potrai commentare parola per parola,", "per rendere questo splendido percorso unico."],
-                            ["Ora tocca a te fare il grande lavoro d'autore,", "inserendo i tuoi personali commenti ed idee", "su ogni singola riga di questo memorabile viaggio."]
-                        ];
-                        this.dbCommenti[this.canticaSelezionata][cantoKey].versi = mockVerses;
-                        this.caricamentoIA = false;
+                        this.dbCommenti[this.canticaSelezionata][cantoKey].versi = terzineGenerate;
                         this.salvaSuBrowser();
-                    }, 1000);
+                    } catch (error) {
+                        alert("Impossibile connettersi al server dei canti. Verifica la connessione.");
+                    } finally {
+                        this.caricamentoIA = false;
+                    }
                 },
-                // Aggiungere una terzina vuota in fondo
                 aggiungiNuovaTerzinaVuota() {
                     const cantoKey = `Canto_${this.cantoCorrente}`;
                     if (!this.dbCommenti[this.canticaSelezionata][cantoKey].versi) {
                         this.dbCommenti[this.canticaSelezionata][cantoKey].versi = [];
                     }
-                    
-                    // Aggiunge la terzina
-                    this.dbCommenti[this.canticaSelezionata][cantoKey].versi.push([
-                        "Nuovo verso 1",
-                        "Nuovo verso 2",
-                        "Nuovo verso 3"
-                    ]);
-                    
+                    this.dbCommenti[this.canticaSelezionata][cantoKey].versi.push(["Nuovo verso 1", "Nuovo verso 2", "Nuovo verso 3"]);
                     this.salvaSuBrowser();
-                    // Seleziona automaticamente l'ultima inserita per poterla modificare
                     this.selezionaTerzina(this.dbCommenti[this.canticaSelezionata][cantoKey].versi.length - 1);
                 },
-                // Eliminazione di una terzina
                 eliminaTerzina(idx) {
-                    if (!confirm(`Sei sicuro di voler eliminare definitivamente la Terzina ${idx + 1}?`)) return;
-                    
+                    if (!confirm(`Eliminare la Terzina ${idx + 1}?`)) return;
                     const cantoKey = `Canto_${this.cantoCorrente}`;
-                    
-                    // Rimuove i versi
                     this.dbCommenti[this.canticaSelezionata][cantoKey].versi.splice(idx, 1);
-                    
-                    // Rimuove l'eventuale commento associato e sposta gli altri indici indietro per non perderli
-                    if (this.dbCommenti[this.canticaSelezionata][cantoKey].commenti) {
-                        const vecchiCommenti = this.dbCommenti[this.canticaSelezionata][cantoKey].commenti;
-                        const nuoviCommenti = {};
-                        
-                        Object.keys(vecchiCommenti).forEach(k => {
-                            const keyNum = parseInt(k);
-                            if (keyNum < idx) {
-                                nuoviCommenti[keyNum] = vecchiCommenti[keyNum];
-                            } else if (keyNum > idx) {
-                                nuoviCommenti[keyNum - 1] = vecchiCommenti[keyNum];
-                            }
-                        });
-                        
-                        this.dbCommenti[this.canticaSelezionata][cantoKey].commenti = nuoviCommenti;
-                    }
-                    
                     this.terzinaSelezionata = null;
                     this.salvaSuBrowser();
                 },
@@ -831,8 +577,6 @@ methods: {
                 selezionaTerzina(idx) {
                     this.terzinaSelezionata = idx;
                     this.commentoInModifica = this.ottieniCommento(idx);
-                    
-                    // Carica i versi correnti nelle tre caselle isolate per evitare perdite di focus
                     const versoCorrente = this.versiDelCanto[idx] || ['', '', ''];
                     this.verso1 = this.cleanText(versoCorrente[0]);
                     this.verso2 = this.cleanText(versoCorrente[1]);
@@ -850,33 +594,7 @@ methods: {
                 salvaVersiCorretti() {
                     if (this.terzinaSelezionata === null) return;
                     const cantoKey = `Canto_${this.cantoCorrente}`;
-                    
-                    // Salvataggio effettivo
-                    this.dbCommenti[this.canticaSelezionata][cantoKey].versi[this.terzinaSelezionata] = [
-                        this.verso1,
-                        this.verso2,
-                        this.verso3
-                    ];
-                    this.salvaSuBrowser();
-                },
-                aggiungiPersonaggio() {
-                    if (!this.nuovoPersonaggioNome.trim() || !this.nuovoPersonaggioDesc.trim()) return;
-                    const cantoKey = `Canto_${this.cantoCorrente}`;
-                    if (!this.dbCommenti[this.canticaSelezionata][cantoKey].personaggi) {
-                        this.dbCommenti[this.canticaSelezionata][cantoKey].personaggi = [];
-                    }
-                    this.dbCommenti[this.canticaSelezionata][cantoKey].personaggi.push({
-                        nome: this.nuovoPersonaggioNome.trim(),
-                        descrizione: this.nuovoPersonaggioDesc.trim()
-                    });
-                    this.nuovoPersonaggioNome = '';
-                    this.nuovoPersonaggioDesc = '';
-                    this.mostraFormPersonaggio = false;
-                    this.salvaSuBrowser();
-                },
-                cancellaPersonaggio(idx) {
-                    const cantoKey = `Canto_${this.cantoCorrente}`;
-                    this.dbCommenti[this.canticaSelezionata][cantoKey].personaggi.splice(idx, 1);
+                    this.dbCommenti[this.canticaSelezionata][cantoKey].versi[this.terzinaSelezionata] = [this.verso1, this.verso2, this.verso3];
                     this.salvaSuBrowser();
                 },
                 getStatoCommentiCanto(cantoNum) {
@@ -901,7 +619,7 @@ methods: {
                         this.inputPassword = '';
                         localStorage.setItem('sessione_autore_dante', 'attiva');
                     } else {
-                        alert('Password Errata! Per questa volta non varcherai la porta del commentatore.');
+                        alert('Password Errata!');
                         this.inputPassword = '';
                     }
                 },
@@ -917,9 +635,7 @@ methods: {
                     downloadAnchor.click();
                     downloadAnchor.remove();
                 },
-                apriFinestraImport() {
-                    this.mostraImport = true;
-                },
+                apriFinestraImport() { this.mostraImport = true; },
                 gestisciFileCaricato(event) {
                     const file = event.target.files[0];
                     if (!file) return;
@@ -933,27 +649,17 @@ methods: {
                                 this.mostraImport = false;
                                 alert('Commenti importati con successo!');
                                 this.caricaCanto(this.cantoCorrente);
-                            } else {
-                                alert('File JSON non compatibile.');
-                            }
-                        } catch (err) {
-                            alert('Errore nella lettura del file.');
-                        }
+                            } else { alert('File JSON non compatibile.'); }
+                        } catch (err) { alert('Errore nella lettura del file.'); }
                     };
                     reader.readAsText(file);
                 }
             },
             mounted() {
-                if (localStorage.getItem('sessione_autore_dante') === 'attiva') {
-                    this.autorizzato = true;
-                }
+                if (localStorage.getItem('sessione_autore_dante') === 'attiva') { this.autorizzato = true; }
                 const salvataggioLocale = localStorage.getItem('divina_commedia_db_commenti');
                 if (salvataggioLocale) {
-                    try {
-                        this.dbCommenti = JSON.parse(salvataggioLocale);
-                    } catch (e) {
-                        console.error("Errore nel caricamento del database locale:", e);
-                    }
+                    try { this.dbCommenti = JSON.parse(salvataggioLocale); } catch (e) { console.error(e); }
                 }
             }
         }).mount('#app');
