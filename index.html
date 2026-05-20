@@ -4,11 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>La Divina Commedia Commentata</title>
-    <!-- Tailwind CSS per uno stile moderno e reattivo -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Vue 3 per la reattività del sito -->
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-    <!-- Google Fonts per caratteri eleganti e storici -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
@@ -55,10 +52,8 @@
 <body class="min-h-screen flex flex-col selection:bg-red-800 selection:text-white">
 
     <div id="app" class="flex flex-col min-h-screen">
-        <!-- TOPBAR -->
         <header class="border-b border-red-950/60 bg-[#120a0a] px-4 py-4 md:px-8 flex flex-col md:flex-row justify-between items-center gap-4 shadow-xl z-10">
             <div class="flex items-center gap-4">
-                <!-- Fiorino d'oro di Firenze dei Guelfi Bianchi con Effige Perfezionata di Dante -->
                 <div 
                     @click="giraMoneta" 
                     class="w-16 h-16 relative cursor-pointer coin-spin flex-shrink-0"
@@ -77,34 +72,25 @@
                                 <stop offset="100%" stop-color="#FFEAA5" />
                             </linearGradient>
                         </defs>
-                        <!-- Corpo della moneta -->
                         <circle cx="50" cy="50" r="47" fill="url(#goldGrad)" stroke="#A07E1C" stroke-width="2"/>
                         <circle cx="50" cy="50" r="43" fill="none" stroke="#70530A" stroke-dasharray="2 2" stroke-width="1.2"/>
                         
-                        <!-- Profilo di Dante Alighieri Migliorato e Definito -->
                         <g transform="translate(1, 0)">
-                            <!-- Cappuccio medievale (Fronte, posteriore e spalle) -->
                             <path d="M 32 63 C 24 57, 21 41, 26 31 C 31 21, 41 17, 51 18 C 58 19, 64 24, 63 32 C 62 36, 56 39, 58 44 C 60 48, 66 49, 64 57 C 62 62, 51 61, 45 63 C 39 65, 34 65, 32 63 Z" fill="#992222" stroke="#5F1414" stroke-width="1.5" />
                             <path d="M 33 63 C 35 70, 39 74, 47 74 C 54 73, 56 68, 55 61 Z" fill="#992222" stroke="#5F1414" stroke-width="1" />
                             
-                            <!-- Volto in primo piano (Profilo sinistro) -->
                             <path d="M 46 27 C 43 27, 39 29, 38 33 L 38 39 C 35.5 39, 34 40, 34 42 C 34 44, 35.5 45, 37 45 L 37 47 C 32 49, 32 50, 33 53 C 35 55, 39 54, 41 54 C 42 58, 45 60, 48 60 C 48 56, 47 52, 45 49 L 46 36 Z" fill="url(#danteGrad)" stroke="#70550B" stroke-width="0.8" />
                             
-                            <!-- Dettaglio Naso dantesco (Iconico e fiero) -->
                             <path d="M 38 33 C 31.5 34.5, 29.5 37, 30.5 40 C 32.5 41.5, 35.5 40, 37 39" fill="none" stroke="#70550B" stroke-width="1.5" stroke-linecap="round" />
                             
-                            <!-- Occhio chiuso riflessivo -->
                             <path d="M 41 33 A 1.5 1.5 0 0 0 44 33" fill="none" stroke="#70550B" stroke-width="1" />
                             
-                            <!-- Corona d'alloro poetica definita foglia per foglia -->
                             <path d="M 39 23 Q 43 20, 47 22 Q 44 26, 40 27 Z" fill="#2E6F40" stroke="#1B4726" stroke-width="0.8" />
                             <path d="M 45 21 Q 49 19, 53 22 Q 50 26, 46 25 Z" fill="#2E6F40" stroke="#1B4726" stroke-width="0.8" />
                             <path d="M 50 23 Q 54 22, 57 26 Q 53 29, 50 27 Z" fill="#2E6F40" stroke="#1B4726" stroke-width="0.8" />
-                            <!-- Nastro cremisi della corona d'alloro -->
                             <path d="M 57 27 Q 62 30, 59 35 Q 56 31, 57 27 Z" fill="#992222" stroke="#5F1414" stroke-width="0.5" />
                         </g>
 
-                        <!-- Scritte sul bordo medievali -->
                         <path id="textPath" d="M 50,94 A 44,44 0 1,1 50.1,94" fill="none"/>
                         <text font-family="'Cinzel', serif" font-size="7.2" font-weight="bold" fill="#5F4B0C">
                             <textPath href="#textPath" startOffset="50%" text-anchor="middle">
@@ -118,11 +104,10 @@
                     <h1 class="text-xl md:text-2xl font-bold tracking-wider text-red-500 flex items-center gap-2">
                         LA DIVINA COMMEDIA
                     </h1>
-                    <p class="text-xs text-stone-400 italic">Lettura interattiva con commento terzine</p>
+                    <p class="text-xs text-stone-400 italic">Lettura interattiva con il tuo commento personale</p>
                 </div>
             </div>
 
-            <!-- Controlli Autore / Esportazione -->
             <div class="flex flex-wrap items-center gap-3">
                 <button 
                     @click="apriFinestraImport" 
@@ -151,9 +136,7 @@
             </div>
         </header>
 
-        <!-- MAIN AREA -->
         <main class="flex-1 flex flex-col">
-            <!-- SEZIONE 1: SCELTA CANTICA (HOMEPAGE) -->
             <section v-if="!canticaSelezionata" class="flex-1 max-w-6xl mx-auto px-4 py-12 flex flex-col justify-center items-center w-full">
                 <div class="text-center mb-12">
                     <h2 class="text-3xl md:text-5xl font-extrabold text-[#D4AF37] tracking-widest mb-2">LA DIVINA COMMEDIA</h2>
@@ -164,9 +147,7 @@
                     <div class="w-24 h-0.5 bg-red-800 mx-auto mt-6"></div>
                 </div>
 
-                <!-- Tre Cantiche con i versi celebri richiesti -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8 w-full px-2 md:px-6">
-                    <!-- INFERNO -->
                     <div @click="selezionaCantica('Inferno')" class="group relative h-[450px] rounded-2xl overflow-hidden border-2 border-red-900/60 cursor-pointer transition-all duration-500 hover:scale-[1.03] hover:border-red-500 flex flex-col justify-end">
                         <img src="https://upload.wikimedia.org/wikipedia/commons/2/25/Charon_by_Dore.jpg" alt="Inferno" class="absolute inset-0 w-full h-full object-cover object-top filter brightness-50 contrast-125 transition duration-500 group-hover:scale-110" />
                         <div class="absolute inset-0 bg-gradient-to-t from-[#0e0404] via-[#0f0505]/60 to-transparent"></div>
@@ -177,7 +158,6 @@
                         </div>
                     </div>
 
-                    <!-- PURGATORIO -->
                     <div @click="selezionaCantica('Purgatorio')" class="group relative h-[450px] rounded-2xl overflow-hidden border-2 border-emerald-950/60 cursor-pointer transition-all duration-500 hover:scale-[1.03] hover:border-emerald-500 flex flex-col justify-end">
                         <img src="https://www.camminarecondante.it/wp-content/uploads/purgatorio-1.jpg" alt="Purgatorio" class="absolute inset-0 w-full h-full object-cover object-center filter brightness-50 contrast-110 transition duration-500 group-hover:scale-110" />
                         <div class="absolute inset-0 bg-gradient-to-t from-[#040e09] via-[#040e09]/60 to-transparent"></div>
@@ -188,7 +168,6 @@
                         </div>
                     </div>
 
-                    <!-- PARADISO -->
                     <div @click="selezionaCantica('Paradiso')" class="group relative h-[450px] rounded-2xl overflow-hidden border-2 border-amber-950/60 cursor-pointer transition-all duration-500 hover:scale-[1.03] hover:border-amber-500 flex flex-col justify-end">
                         <img src="https://upload.wikimedia.org/wikipedia/commons/e/eb/Paradiso_Canto_31_%28148200393%29.jpg" alt="Paradiso" class="absolute inset-0 w-full h-full object-cover object-center filter brightness-[0.45] contrast-125 transition duration-500 group-hover:scale-110" />
                         <div class="absolute inset-0 bg-gradient-to-t from-[#0f0d05] via-[#0f0d05]/60 to-transparent"></div>
@@ -201,10 +180,8 @@
                 </div>
             </section>
 
-            <!-- SEZIONE 2: LETTURA INTERATTIVA -->
             <div v-else class="flex-1 flex flex-col lg:flex-row">
                 
-                <!-- SPALLA SINISTRA: INDICE DEI CANTI (Senza numeri romani, pulito ed elegante) -->
                 <aside class="w-full lg:w-72 border-r border-stone-900 bg-[#0d0707] flex flex-col">
                     <div class="p-4 border-b border-stone-900 flex justify-between items-center bg-[#140b0b]">
                         <button @click="tornaAllaHome" class="text-stone-400 hover:text-white text-xs flex items-center gap-1">
@@ -215,7 +192,6 @@
                         </span>
                     </div>
 
-                    <!-- Lista dei canti scorrevole -->
                     <div class="flex-1 overflow-y-auto max-h-[250px] lg:max-h-[calc(100vh-180px)] p-2 space-y-1">
                         <button 
                             v-for="cantoNum in numeroCantiPerCantica"
@@ -232,13 +208,10 @@
                     </div>
                 </aside>
 
-                <!-- CORPO CENTRALE: TESTO E COMMENTO -->
                 <div class="flex-1 flex flex-col md:flex-row overflow-hidden">
                     
-                    <!-- COLONNA DEL TESTO DI DANTE (SINISTRA) -->
                     <div class="flex-1 overflow-y-auto p-4 md:p-8 max-h-[60vh] md:max-h-[calc(100vh-120px)] border-b md:border-b-0 md:border-r border-stone-900 bg-stone-950/40">
                         <div class="max-w-xl mx-auto">
-                            <!-- Intestazione Canto -->
                             <div class="mb-8 border-b border-stone-900 pb-4 flex justify-between items-end">
                                 <div>
                                     <h2 class="text-2xl md:text-3xl font-bold tracking-wider" :class="coloriCantica.testo">
@@ -257,7 +230,6 @@
                                 </button>
                             </div>
 
-                            <!-- Caricamento Versi Reali veri con database remoto -->
                             <div v-if="versiDelCanto.length === 0" class="text-center py-12">
                                 <p class="text-stone-400 text-sm italic mb-4">I versi storici originali di questo Canto non sono ancora presenti in memoria.</p>
                                 <div class="flex flex-col gap-3 max-w-xs mx-auto">
@@ -317,7 +289,6 @@
                         </div>
                     </div>
 
-                    <!-- COLONNA DEL COMMENTO E DELLA MODIFICA (DESTRA) -->
                     <div class="w-full md:w-[450px] overflow-y-auto p-4 md:p-6 max-h-[80vh] md:max-h-[calc(100vh-120px)] bg-[#0f0a0a] flex flex-col justify-between">
                         <div>
                             <div v-if="terzinaSelezionata === null" class="h-64 flex flex-col justify-center items-center text-center p-6 border border-stone-900 rounded-xl bg-stone-950/20">
@@ -355,7 +326,6 @@
                                     </div>
                                 </div>
 
-                                <!-- Pannello di modifica per l'autore -->
                                 <div v-else class="space-y-6">
                                     <div class="space-y-2">
                                         <label class="block text-xs font-bold text-red-500 uppercase tracking-widest">Commento o Parafrasi</label>
@@ -373,7 +343,6 @@
                                         </button>
                                     </div>
 
-                                    <!-- Modifica stabili dei versi della terzina -->
                                     <div class="border-t border-stone-800/80 pt-5 space-y-3">
                                         <div class="flex items-center gap-1.5 text-xs font-bold text-[#D4AF37] uppercase tracking-widest">
                                             <span>⚜️</span> Modifica Versi della Terzina
@@ -405,12 +374,10 @@
             </div>
         </main>
 
-        <!-- FOOTER -->
         <footer class="border-t border-stone-950 bg-[#070404] py-4 text-center text-[11px] text-stone-500">
             Realizzato per commentare la Divina Commedia. Commento di Alessandro Arrighi. Salva ed esporta sempre il tuo file <strong>commenti.json</strong>.
         </footer>
 
-        <!-- MODAL ACCESS -->
         <div v-if="mostraLogin" class="fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50">
             <div class="bg-[#120a0a] border border-red-950/80 rounded-2xl p-6 max-w-sm w-full shadow-2xl space-y-4">
                 <div class="text-center">
@@ -425,7 +392,6 @@
             </div>
         </div>
 
-        <!-- MODAL IMPORT -->
         <div v-if="mostraImport" class="fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50">
             <div class="bg-[#120a0a] border border-stone-800 rounded-2xl p-6 max-w-lg w-full shadow-2xl space-y-4">
                 <div class="text-center">
@@ -445,7 +411,6 @@
 
     </div>
 
-    <!-- SCRIPT APPLICATIVO -->
     <script>
         const PASSWORD_AUTORE_CONFIG = 'D2A0n2T6e';
         const { createApp } = Vue;
@@ -520,35 +485,99 @@
                 },
                 async scaricaCantoRealeDante() {
                     this.caricamentoIA = true;
-                    try {
-                        const canticaCodice = this.canticaSelezionata.toLowerCase();
-                        const response = await fetch(`https://raw.githubusercontent.com/Anatoly03/DivinaCommedia-API/master/database/${canticaCodice}/${this.cantoCorrente}.json`);
-                        
-                        if (!response.ok) throw new Error("Canto non trovato nel server");
-                        
-                        const data = await response.json();
-                        let terzineGenerate = [];
-                        let terzinaTemporanea = [];
-                        
-                        data.verses.forEach((v) => {
-                            terzinaTemporanea.push(v.text);
-                            if (terzinaTemporanea.length === 3) {
-                                terzineGenerate.push(terzinaTemporanea);
-                                terzinaTemporanea = [];
-                            }
-                        });
-                        if (terzinaTemporanea.length > 0) {
-                            terzineGenerate.push(terzinaTemporanea);
-                        }
+                    const canticaCodice = this.canticaSelezionata.toLowerCase();
+                    let successo = false;
 
-                        const cantoKey = `Canto_${this.cantoCorrente}`;
-                        this.dbCommenti[this.canticaSelezionata][cantoKey].versi = terzineGenerate;
-                        this.salvaSuBrowser();
-                    } catch (error) {
-                        alert("Impossibile connettersi al server dei canti. Verifica la connessione.");
-                    } finally {
-                        this.caricamentoIA = false;
+                    try {
+                        const response = await fetch(`https://cdn.jsdelivr.net/gh/Anatoly03/DivinaCommedia-API@master/database/${canticaCodice}/${this.cantoCorrente}.json`);
+                        if (response.ok) {
+                            const data = await response.json();
+                            this.elaboraVersiScaricati(data.verses);
+                            successo = true;
+                        }
+                    } catch (e) {
+                        console.warn("Fonte principale non raggiungibile, provo la riserva...");
                     }
+
+                    if (!successo) {
+                        try {
+                            const titoloWikisource = `Divina_Commedia/${this.canticaSelezionata}/Canto_${this.numeriRomani(this.cantoCorrente)}`;
+                            const response = await fetch(`https://it.wikisource.org/api/rest_v1/page/html/${encodeURIComponent(titoloWikisource)}`);
+                            if (response.ok) {
+                                const htmlText = await response.text();
+                                this.elaboraVersiDaWikisource(htmlText);
+                                successo = true;
+                            }
+                        } catch (e) {
+                            console.error("Anche la fonte di riserva ha risposto con errore:", e);
+                        }
+                    }
+
+                    if (!successo) {
+                        alert("Impossibile connettersi ai server dei canti storici. Riprova tra poco.");
+                    }
+                    this.caricamentoIA = false;
+                },
+                elaboraVersiScaricati(versesArray) {
+                    let terzineGenerate = [];
+                    let terzinaTemporanea = [];
+                    
+                    versesArray.forEach((v) => {
+                        terzinaTemporanea.push(v.text);
+                        if (terzinaTemporanea.length === 3) {
+                            terzineGenerate.push(terzinaTemporanea);
+                            terzinaTemporanea = [];
+                        }
+                    });
+                    if (terzinaTemporanea.length > 0) {
+                        terzineGenerate.push(terzinaTemporanea);
+                    }
+
+                    const cantoKey = `Canto_${this.cantoCorrente}`;
+                    this.dbCommenti[this.canticaSelezionata][cantoKey].versi = terzineGenerate;
+                    this.salvaSuBrowser();
+                },
+                elaboraVersiDaWikisource(htmlText) {
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(htmlText, 'text/html');
+                    const righeVersi = doc.querySelectorAll('p, span.lg-li');
+                    
+                    let versiEstratti = [];
+                    righeVersi.forEach(el => {
+                        const testo = el.textContent.trim();
+                        if (testo.length > 5 && !/^\d+$/.test(testo)) {
+                            versiEstratti.push(testo);
+                        }
+                    });
+
+                    let terzineGenerate = [];
+                    let terzinaTemporanea = [];
+                    versiEstratti.forEach(v => {
+                        terzinaTemporanea.push(v);
+                        if (terzinaTemporanea.length === 3) {
+                            terzineGenerate.push(terzinaTemporanea);
+                            terzinaTemporanea = [];
+                        }
+                    });
+                    if (terzinaTemporanea.length > 0) {
+                        terzineGenerate.push(terzinaTemporanea);
+                    }
+
+                    const cantoKey = `Canto_${this.cantoCorrente}`;
+                    this.dbCommenti[this.canticaSelezionata][cantoKey].versi = terzineGenerate;
+                    this.salvaSuBrowser();
+                },
+                numeriRomani(num) {
+                    const lookup = { M:1000, CM:900, D:500, CD:400, C:100, XC:90, L:50, XL:40, X:10, IX:9, V:5, IV:4, I:1 };
+                    let roman = '';
+                    let i;
+                    for (i in lookup) {
+                        while (num >= lookup[i]) {
+                            roman += i;
+                            num -= lookup[i];
+                        }
+                    }
+                    return roman;
                 },
                 aggiungiNuovaTerzinaVuota() {
                     const cantoKey = `Canto_${this.cantoCorrente}`;
